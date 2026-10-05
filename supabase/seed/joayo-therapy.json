@@ -1,0 +1,182 @@
+{
+  "clinic": {
+    "slug": "joayo-therapy",
+    "name": "Joayo Therapy",
+    "booking_url": "https://joayotherapy.janeapp.com/#/team",
+    "phone": "604-558-1347",
+    "email": "info@joayotherapy.ca"
+  },
+  "documents": [
+    {
+      "content": "Joayo Therapy is a multidisciplinary wellness clinic located at Unit 100C, 4664 Lougheed Hwy, Burnaby, BC V5C 5T5 (Brentwood, Burnaby). Under one roof, the clinic offers massage therapy (RMT), physiotherapy, chiropractic care, acupuncture, pilates, kinesiology/personal training, and naturopathic medicine. Phone: 604-558-1347. Email: info@joayotherapy.ca.",
+      "metadata": { "category": "general", "source_url": "https://joayotherapy.ca/our-clinic/" }
+    },
+    {
+      "content": "Joayo Therapy's business hours are Monday to Friday 9am-8pm, Saturday 9am-6pm, and Sunday 10am-5pm. The clinic address is Unit 100C, 4664 Lougheed Hwy, Burnaby, BC V5C 5T5. Phone: 604-558-1347. Email: info@joayotherapy.ca.",
+      "metadata": { "category": "hours_location", "source_url": "https://joayotherapy.ca/contact/" }
+    },
+    {
+      "content": "Appointments at Joayo Therapy can be booked online through the clinic's JaneApp booking portal (https://joayotherapy.janeapp.com/#/team), or by calling 604-558-1347 or emailing info@joayotherapy.ca. If the patient already knows which practitioner they want, book directly through that practitioner's own JaneApp link (see the team/practitioner reference material) rather than the general team page - it's faster and shows that practitioner's specific treatments and prices.",
+      "metadata": { "category": "booking", "source_url": "https://joayotherapy.ca/contact/" }
+    },
+    {
+      "content": "Joayo Therapy requires 24 hours' notice to cancel or reschedule an appointment. Late cancellations or no-shows are charged the full price of the booked session.",
+      "metadata": { "category": "policy", "service": "cancellation", "source_url": "https://joayotherapy.janeapp.com/#/team" }
+    },
+    {
+      "content": "Joayo Therapy offers Registered Massage Therapy (RMT) for pain relief, stress reduction, and general wellness. Specialized options include TMJ-focused massage, pediatric massage, and pregnancy/post-natal massage, along with deep tissue and therapeutic massage. Additional online-booking categories include ICBC Massage Therapy, Hot Stone Massage Therapy, Buccal Facial TMJ Massage, and Lymphatic Massage. Sessions are provided by Registered Massage Therapists (RMTs). Booking is available online via JaneApp. Approximate pricing (as of the clinic's last JaneApp price update): a standard 60-minute massage is $140, shorter 40-50 minute sessions are $120-$130; specialty massages (Hot Stone, Lymphatic, Buccal Facial TMJ) range roughly $150-$215. ICBC-covered massage visits typically have no out-of-pocket cost, aside from a small $15-$35 user fee on some session types. Exact current pricing is confirmed at booking.",
+      "metadata": { "category": "service", "service": "rmt", "source_url": "https://joayotherapy.ca/service/rmt/" }
+    },
+    {
+      "content": "Joayo Therapy's physiotherapy service addresses sports injuries (sprains, strains, tendonitis, fractures), chronic pain (back and neck pain, fibromyalgia), arthritis, work-related injuries (repetitive strain injury, postural dysfunction), and post-surgical rehabilitation, using manual therapy, therapeutic exercise, and other modalities tailored to each patient. Additional online-booking categories include ICBC Physical Therapy, Shockwave Physiotherapy, Pelvic Floor Physiotherapy, TMJ & Jaw Physiotherapy, and Clinical Pilates led by a physiotherapist. It is provided by our physiotherapist Pawan Sharma. Approximate pricing (as of the clinic's last JaneApp price update): initial assessment (45 min) is $130, follow-ups are $100-$125 depending on length; a free 15-minute consultation is also available. ICBC-covered visits typically have no out-of-pocket cost, aside from a $10 user fee on the extended subsequent visit. Exact current pricing is confirmed at booking.",
+      "metadata": { "category": "service", "service": "physiotherapy", "source_url": "https://joayotherapy.ca/service/physiotherapy/" }
+    },
+    {
+      "content": "Joayo Therapy's chiropractic care addresses back and neck pain, TMJ issues, shoulder/knee/hip pain, sports injuries, headaches and migraines, and postural problems, through spinal adjustments, extremity care, and soft tissue techniques (including Dynamic Neuromuscular Stabilization, Motion Palpation Institute methods, and Neurokinetic Therapy). Additional online-booking categories include ICBC Chiropractic and ShockWave Chiropractic. It is provided by Dr. Joseph (Jae Yeol) Lee, Chiropractor. Approximate pricing (as of the clinic's last JaneApp price update): initial visit (35 min) is $125, follow-ups are $80-$110 depending on length. ICBC-covered visits typically have no out-of-pocket cost. Exact current pricing is confirmed at booking.",
+      "metadata": { "category": "service", "service": "chiropractic", "source_url": "https://joayotherapy.ca/service/chiropractic/" }
+    },
+    {
+      "content": "Joayo Therapy's acupuncture service addresses chronic pain, headaches, digestive issues, menstrual cramps, infertility, anxiety, and depression, and is also used to support sleep, energy, and general stress reduction. Additional online-booking categories include Facial Acupuncture, Body Contouring & Sculpting with Acupuncture, Pregnancy & Fertility Acupuncture, Advanced Tui-Na with Cupping, Foot Reflexology, Osteopathic Pelvic Floor with Acupuncture, ICBC Acupuncture, and a combined ICBC Acupuncture + RMT session. Practitioners use sterile needles under strict hygiene protocols. Approximate pricing (as of the clinic's last JaneApp price update): a standard session is $110-$125 depending on length; specialty treatments (facial acupuncture, fertility/pregnancy acupuncture, cupping, reflexology) range roughly $110-$210. ICBC-covered visits typically have no out-of-pocket cost. Exact current pricing is confirmed at booking.",
+      "metadata": { "category": "service", "service": "acupuncture", "source_url": "https://joayotherapy.ca/service/acupuncture/" }
+    },
+    {
+      "content": "Joayo Therapy offers Pilates instruction focused on core strength, posture, flexibility, and body awareness, using both mat-based and equipment-based methods (Reformer, Cadillac, Chair, Barrel). Formats include group and private sessions and Pre/Post-natal Pilates for expectant and new mothers, taught by certified instructors. Approximate pricing (as of the clinic's last JaneApp price update): a new-client trial session is $45, private 1:1 sessions are $95, and group sessions range $35-$70 depending on group size. Exact current pricing is confirmed at booking.",
+      "metadata": { "category": "service", "service": "pilates", "source_url": "https://joayotherapy.ca/service/pilates/" }
+    },
+    {
+      "content": "Joayo Therapy's kinesiology service covers movement assessment, injury rehabilitation, athletic performance support, chronic pain management, and postural correction, with personalized treatment plans developed by a certified kinesiologist. Additional online-booking categories include ICBC Kinesiology and one-on-one Personal Training. Approximate pricing (as of the clinic's last JaneApp price update): a private Active Rehab/personal training session is $95. ICBC-covered Active Rehab visits typically have no out-of-pocket cost. Exact current pricing is confirmed at booking.",
+      "metadata": { "category": "service", "service": "kinesiology", "source_url": "https://joayotherapy.ca/service/kinesiology/" }
+    },
+    {
+      "content": "Joayo Therapy's naturopathic medicine service, led by Dr. Maral Afifi (Naturopathic Doctor), includes IV nutrient therapy (such as Myers' Cocktail, NAD+ therapy, Detox Drip, and Glutathione Push), IM injections (vitamin B12, vitamin D, and immune-support compounds), neuromodulator injections (both cosmetic and therapeutic use, e.g. for TMJ-related tension), and skin/hair treatments such as mesotherapy. Additional online-booking category: Naturopathic Cosmetic treatments. Treatment plans are personalized to each client's health goals. Approximate pricing (as of the clinic's last JaneApp price update): an initial visit (60 min) is $230, follow-ups range $70-$170 depending on length; IV therapy sessions range $160-$300, and cosmetic treatments (mesotherapy, Botox, skin boosters) range roughly $350-$600. Exact current pricing is confirmed at booking.",
+      "metadata": { "category": "service", "service": "naturopathic-medicine", "source_url": "https://joayotherapy.ca/service/naturopathic-medicine/" }
+    },
+    {
+      "content": "Joayo Therapy offers direct billing to more than 20 extended health insurance providers, including Pacific Blue Cross, Medavie Blue Cross (RCMP), Green Shield, Great-West Life, and Sun Life. The process: (1) the clinic verifies insurance coverage before the appointment, (2) the patient receives treatment without paying up front, (3) the clinic submits the claim directly to the insurer, and (4) the patient pays only any co-payment or amount not covered by their plan at the time of the visit.",
+      "metadata": { "category": "billing", "service": "direct-billing", "source_url": "https://joayotherapy.ca/service/direct-billing/" }
+    },
+    {
+      "content": "Joayo Therapy accepts ICBC claims for motor vehicle accident injuries, covering chiropractic, massage therapy, physiotherapy, acupuncture, active rehab, and clinical counseling. To start treatment: (1) report the claim to ICBC by calling 604-520-8222 or online to receive a claim number, then (2) submit the ICBC intake form on the clinic website: https://joayotherapy.ca/service/icbc/ - the form collects the patient's name, phone, email, birthday, ICBC claim number, and the ICBC adjuster's name and phone number, and lets the clinic start the recovery plan faster than a phone call or email. Patients who prefer not to use the form can instead call 604-558-1347 or email info@joayotherapy.ca. ICBC-covered visits typically have no out-of-pocket cost to the patient - occasionally a small user fee (roughly $10-$35) applies to certain extended or standard follow-up sessions, which is confirmed at booking.",
+      "metadata": { "category": "billing", "service": "icbc", "source_url": "https://joayotherapy.ca/service/icbc/" }
+    },
+    {
+      "content": "Dr. Maral Afifi is a Naturopathic Doctor at Joayo Therapy specializing in cosmetic and therapeutic injections and IV nutrient therapy. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/60",
+      "metadata": { "category": "team", "name": "Maral Afifi", "title": "Naturopathic Doctor", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/60", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/60" }
+    },
+    {
+      "content": "Yeonghun (Andrew) Bae, BSc, is a Registered Massage Therapist at Joayo Therapy with 15 years of medical experience, treating chronic pain, injuries, and fasciitis. Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/63",
+      "metadata": { "category": "team", "name": "Yeonghun (Andrew) Bae", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/63", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/63" }
+    },
+    {
+      "content": "Laina (Ain) Cha is a STOTT PILATES(R)-certified Pilates instructor at Joayo Therapy, teaching Matwork, Reformer, Cadillac, Chair, and Barrel formats. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/83",
+      "metadata": { "category": "team", "name": "Laina (Ain) Cha", "title": "Pilates Instructor", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/83", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/83" }
+    },
+    {
+      "content": "Parvin Ehsani is a TCM Practitioner, Manual Osteopath, and Facial Acupuncture Specialist at Joayo Therapy with 20+ years of experience, focusing on facial acupuncture and skin health treatments. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/73",
+      "metadata": { "category": "team", "name": "Parvin Ehsani", "title": "TCM Practitioner / Manual Osteopath", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/73", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/73" }
+    },
+    {
+      "content": "Colin Eng, RMT, is a Registered Massage Therapist at Joayo Therapy providing personalized therapeutic massage treatments. Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/28",
+      "metadata": { "category": "team", "name": "Colin Eng", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/28", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/28" }
+    },
+    {
+      "content": "Anna (Hyejin) Kim, R.TCM.P, is a Registered Traditional Chinese Medicine Practitioner at Joayo Therapy offering precision acupuncture, facial acupuncture, and a holistic health approach. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/74",
+      "metadata": { "category": "team", "name": "Anna (Hyejin) Kim", "title": "Registered TCM Practitioner", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/74", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/74" }
+    },
+    {
+      "content": "Jiyoon (Karen) Kim, RMT, is a Registered Massage Therapist at Joayo Therapy with 10+ years of experience, specializing in chronic pain, shoulder/neck tension, and myofascial release. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/72",
+      "metadata": { "category": "team", "name": "Jiyoon (Karen) Kim", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/72", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/72" }
+    },
+    {
+      "content": "Mimi (Mihwa) Kim is a Pilates instructor at Joayo Therapy with 9+ years of experience, focusing on rehabilitation Pilates and injury recovery. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/47",
+      "metadata": { "category": "team", "name": "Mimi (Mihwa) Kim", "title": "Pilates Instructor", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/47", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/47" }
+    },
+    {
+      "content": "Rose (Bo Kyung) Kim, R.TCM.P, is an Acupuncturist, Herbalist, and TCM Practitioner at Joayo Therapy, and a former physiotherapist who integrates Vipassana meditation into her practice. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/48",
+      "metadata": { "category": "team", "name": "Rose (Bo Kyung) Kim", "title": "Registered TCM Practitioner", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/48", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/48" }
+    },
+    {
+      "content": "Sharon Kim, RMT, is a Registered Massage Therapist and Acupuncturist at Joayo Therapy specializing in prenatal/postpartum massage and motor-vehicle-accident (MVA) recovery - she is dual-licensed in RMT and Acupuncture, including a combined ICBC Acu+RMT treatment. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/1",
+      "metadata": { "category": "team", "name": "Sharon Kim", "title": "Registered Massage Therapist / Acupuncturist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/1", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/1" }
+    },
+    {
+      "content": "Yeonha (Oliviah) Kim, R.Ac/RMT, is a Registered Acupuncturist and Registered Massage Therapist at Joayo Therapy with 10+ years of experience, combining acupuncture needles with Tui-Na, cupping, and moxibustion. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/3",
+      "metadata": { "category": "team", "name": "Yeonha (Oliviah) Kim", "title": "Registered Acupuncturist / RMT", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/3", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/3" }
+    },
+    {
+      "content": "Evelyn (Seyoung) Kim is a Pilates instructor at Joayo Therapy who emphasizes functional training. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/36",
+      "metadata": { "category": "team", "name": "Evelyn (Seyoung) Kim", "title": "Pilates Instructor", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/36", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/36" }
+    },
+    {
+      "content": "Gavin Kc. Lau, RMT, is a Registered Massage Therapist and Certified Sport Massage Therapist at Joayo Therapy, a 2014 graduate specializing in TMJ dysfunction and treating patients from pediatric to geriatric ages. Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/51",
+      "metadata": { "category": "team", "name": "Gavin Kc. Lau", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/51", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/51" }
+    },
+    {
+      "content": "Dr. Joseph Lee, D.C., is the Chiropractor at Joayo Therapy, holding MPI, DNS, FM, FMS, NKT, CCMI, and CCEP certifications, and specializing in extremity injuries (TMJ, shoulder, elbow, hip, knee, ankle). Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/57",
+      "metadata": { "category": "team", "name": "Dr. Joseph Lee", "title": "Chiropractor", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/57", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/57" }
+    },
+    {
+      "content": "Nami Lee is a Certified Pilates Instructor at Joayo Therapy with 10+ years of clinical experience and Pilates University certifications; she is also a licensed physical therapist, but at this clinic she is bookable for Pilates (including Pre/Post-natal Pilates), not physiotherapy appointments. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/68",
+      "metadata": { "category": "team", "name": "Nami Lee", "title": "Pilates Instructor", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/68", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/68" }
+    },
+    {
+      "content": "Seung Hoon (Steven) Lee, R.Ac, is a Registered Acupuncturist at Joayo Therapy with 25+ years of foot reflexology experience, integrating Tui Na and acupuncture. Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/80",
+      "metadata": { "category": "team", "name": "Seung Hoon (Steven) Lee", "title": "Registered Acupuncturist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/80", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/80" }
+    },
+    {
+      "content": "Sungeun (Emma) Lee, RMT, is a Registered Massage Therapist at Joayo Therapy treating acute and chronic pain and prenatal/postpartum clients with moderate-to-deep pressure techniques. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/27",
+      "metadata": { "category": "team", "name": "Sungeun (Emma) Lee", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/27", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/27" }
+    },
+    {
+      "content": "Jinjoo (JJ) Moon, RMT, is a Registered Massage Therapist at Joayo Therapy certified in IASTM, treating cervical disc disorders, neuralgia, and myofascial pain. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/55",
+      "metadata": { "category": "team", "name": "Jinjoo (JJ) Moon", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/55", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/55" }
+    },
+    {
+      "content": "Daniel Na, RMT, is a Registered Massage Therapist at Joayo Therapy focusing on chronic pain relief, athletic performance, and relaxation. Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/2",
+      "metadata": { "category": "team", "name": "Daniel Na", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/2", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/2" }
+    },
+    {
+      "content": "Sobia Nusrat is a Pilates instructor at Joayo Therapy with 9+ years of experience in classical and contemporary Pilates, specializing in pre/postnatal clients. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/52",
+      "metadata": { "category": "team", "name": "Sobia Nusrat", "title": "Pilates Instructor", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/52", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/52" }
+    },
+    {
+      "content": "Juho (John) Park, CSEP-CPT, is a Personal Trainer and Kinesiologist at Joayo Therapy with a Bachelor's degree in Kinesiology, specializing in rehabilitation and fitness. Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/39",
+      "metadata": { "category": "team", "name": "Juho (John) Park", "title": "Kinesiologist / Personal Trainer", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/39", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/39" }
+    },
+    {
+      "content": "Pawan Sharma, PT, is a Physiotherapist at Joayo Therapy with 8+ years of orthopedic rehabilitation experience, a pelvic health specialist certified in Clinical Pilates and TMJ rehabilitation. Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/84",
+      "metadata": { "category": "team", "name": "Pawan Sharma", "title": "Physiotherapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/84", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/84" }
+    },
+    {
+      "content": "Lin (Lynna) Su is a Doctor of Traditional Chinese Medicine and Registered Massage Therapist at Joayo Therapy, dual-licensed and treating whiplash, frozen shoulder, and lower back pain. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/17",
+      "metadata": { "category": "team", "name": "Lin (Lynna) Su", "title": "TCM Doctor / RMT", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/17", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/17" }
+    },
+    {
+      "content": "Jun (Yiejun) Yoo, RMT, is a Registered Massage Therapist at Joayo Therapy, a 2024 graduate who blends massage with Pilates-based approaches. Book directly with him: https://joayotherapy.janeapp.com/#/staff_member/8",
+      "metadata": { "category": "team", "name": "Jun (Yiejun) Yoo", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/8", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/8" }
+    },
+    {
+      "content": "Beibing (Maggie) Zhang, RMT, is a Registered Massage Therapist at Joayo Therapy focusing on myofascial release, neuromuscular therapy, and patient education. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/18",
+      "metadata": { "category": "team", "name": "Beibing (Maggie) Zhang", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/18", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/18" }
+    },
+    {
+      "content": "Heyun (Selena) Zhou, RMT, is a Registered Massage Therapist at Joayo Therapy, a 2021 graduate specializing in postural correction, Swedish massage, and stretching. Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/9",
+      "metadata": { "category": "team", "name": "Heyun (Selena) Zhou", "title": "Registered Massage Therapist", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/9", "source_url": "https://joayotherapy.janeapp.com/#/staff_member/9" }
+    },
+    {
+      "content": "Joayo Therapy is currently running a limited-time promotion: 20% off sessions with Parvin Ehsani (TCM Practitioner, Manual Osteopath, Facial Acupuncture Specialist). Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/73",
+      "metadata": { "category": "promotion", "practitioner": "Parvin Ehsani", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/73", "source_url": "https://joayotherapy.janeapp.com/#/team" },
+      "expires_at": "2026-09-30T23:59:59-07:00"
+    },
+    {
+      "content": "Joayo Therapy is currently running a limited-time promotion: 20% off sessions with Rose (Bo Kyung) Kim (Acupuncturist, Herbalist, TCM Practitioner). Book directly with her: https://joayotherapy.janeapp.com/#/staff_member/48",
+      "metadata": { "category": "promotion", "practitioner": "Rose (Bo Kyung) Kim", "booking_url": "https://joayotherapy.janeapp.com/#/staff_member/48", "source_url": "https://joayotherapy.janeapp.com/#/team" },
+      "expires_at": "2026-09-30T23:59:59-07:00"
+    },
+    {
+      "content": "Joayo Therapy is currently running a limited-time promotion: 25% off a 10-session Active Rehab Personal Training package.",
+      "metadata": { "category": "promotion", "service": "personal-training", "source_url": "https://joayotherapy.janeapp.com/#/team" },
+      "expires_at": "2026-09-30T23:59:59-07:00"
+    }
+  ]
+}
