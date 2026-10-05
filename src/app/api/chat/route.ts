@@ -6,6 +6,7 @@ import {
   getAllPractitioners,
   getClinicContact,
   matchDocuments,
+  type ClinicContact,
   type PractitionerLink,
 } from "@/lib/supabase";
 import { buildEmergencyResponse, detectEmergency, detectLanguage } from "@/lib/safety";
@@ -26,7 +27,22 @@ interface ChatRequestBody {
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-const SYSTEM_PROMPT = `You are the front-desk chatbot for a medical/wellness clinic in Vancouver, BC, Canada.
+function buildSystemPrompt(clinic: ClinicContact | null): string {
+  const clinicName = clinic?.name ?? "the clinic";
+  const phoneDigits = clinic?.phone?.replace(/\D/g, "");
+  const phoneRule =
+    clinic?.phone && phoneDigits
+      ? `- Phone number -> "[${clinic.phone}](tel:+1${phoneDigits})" - this is ${clinicName}'s real
+  number, always link it exactly this way.`
+      : `- Phone number -> format as "[<number>](tel:+1<digits>)" using the number as it appears in
+  the reference material (strip spaces/dashes, prefix "+1" for a Canadian number).`;
+  const emailRule = clinic?.email
+    ? `- Email -> "[${clinic.email}](mailto:${clinic.email})" - this is ${clinicName}'s real email,
+  always link it exactly this way.`
+    : `- Email -> format as "[<email>](mailto:<email>)" using the address as it appears in the
+  reference material.`;
+
+  return `You are the front-desk chatbot for ${clinicName}, a medical/wellness clinic in Vancouver, BC, Canada.
 Answer the patient's question only using the "Reference material" provided below, in a
 friendly and accurate way. If the reference material doesn't contain the answer, say so
 honestly and direct the patient to contact the clinic directly. Never provide a medical
@@ -75,13 +91,14 @@ snapshot, not a live quote. Never state a price the reference material doesn't c
 
 Contact details must always be clickable links, in every reply, not just hours/location
 answers:
-- Phone number -> "[604-558-1347](tel:+16045581347)" (strip spaces/dashes, prefix "+1"
-  for a Canadian number).
-- Email -> "[info@joayotherapy.ca](mailto:info@joayotherapy.ca)".
-- Street address -> a Google Maps link: "[Unit 100C, 4664 Lougheed Hwy, Burnaby, BC V5C
-  5T5](https://www.google.com/maps/search/?api=1&query=Unit+100C+4664+Lougheed+Hwy+Burnaby+BC+V5C+5T5)"
-  (URL-encode the address, spaces as "+").
-Never write a bare phone number, email, or address with no link.
+${phoneRule}
+${emailRule}
+- Street address -> a Google Maps link built from whatever street address appears in the
+  reference material: "[<address>](https://www.google.com/maps/search/?api=1&query=<address>)",
+  where <address> in the URL has every space AND comma replaced with "+" (no commas in the URL).
+  Never invent an address that isn't in the reference material.
+Never write a bare phone number, email, or address with no link. Never use a different clinic's
+phone number, email, or address as an example or filler - always use ${clinicName}'s own values above.
 
 When the reference material includes a JaneApp booking link for a specific practitioner
 (a "booking_url" or a "Book directly with them" URL), and the patient wants to book or
@@ -97,7 +114,7 @@ naming, don't link at all rather than risk sending the patient to the wrong page
 When you mention a specific service by name (Chiropractic, Acupuncture, Massage
 Therapy/RMT, Physiotherapy, Pilates, Kinesiology, Naturopathic Medicine) and that
 service's reference material includes a "source_url", link the service name to it,
-e.g. "[Chiropractic care](https://joayotherapy.ca/service/chiropractic/)" - same pattern
+e.g. "[Chiropractic care](<source_url from the reference material>)" - same pattern
 as practitioner links. Don't invent a URL if the reference material doesn't give one.
 
 If the patient asks a general "how do I book" question without naming a practitioner or
@@ -109,13 +126,14 @@ answer.
 
 If the patient mentions an ICBC claim or motor vehicle accident, point them to the ICBC
 intake form on the clinic website as the primary next step - link it from the reference
-material's source_url, e.g. "[ICBC intake form](https://joayotherapy.ca/service/icbc/)".
+material's source_url, e.g. "[ICBC intake form](<source_url from the reference material>)".
 It's faster for the clinic to process than a phone call or email, since it collects
 everything needed (claim number, adjuster details) in one submission. Never ask the
 patient to type their ICBC claim number, adjuster name, or adjuster phone number into
 this chat - that's sensitive information that belongs in the form, not in a chat log.
 Mention calling/emailing only as a secondary option for patients who'd rather not use
 the form.`;
+}
 
 function isChatMessage(value: unknown): value is ChatMessage {
   if (typeof value !== "object" || value === null) return false;
@@ -259,11 +277,13 @@ export async function POST(req: NextRequest) {
 
   try {
     // 1. Embed the user's question, and separately fetch the clinic's full
-    // practitioner roster (used later to correct booking links) - these
-    // don't depend on each other, so run them in parallel.
-    const [queryEmbedding, roster] = await Promise.all([
+    // practitioner roster (used later to correct booking links) and contact
+    // info (used to template the system prompt below) - these don't depend
+    // on each other, so run them in parallel.
+    const [queryEmbedding, roster, clinic] = await Promise.all([
       embedQuery(message),
       getAllPractitioners(clinicId),
+      getClinicContact(clinicId),
     ]);
 
     // 2. Retrieve relevant knowledge-base chunks from Supabase (pgvector),
@@ -274,7 +294,7 @@ export async function POST(req: NextRequest) {
     // corpus (especially with cross-lingual queries, e.g. Korean question vs.
     // English KB), on-topic and off-topic chunks score too close together for
     // a similarity cutoff to reliably tell them apart. Actual relevance
-    // judgment is left to Claude via SYSTEM_PROMPT ("say so honestly" when
+    // judgment is left to Claude via the system prompt ("say so honestly" when
     // the answer isn't in the reference material), which can read the
     // retrieved text and decide.
     const matches = await matchDocuments(clinicId, queryEmbedding, 8, 0.2);
@@ -296,7 +316,7 @@ export async function POST(req: NextRequest) {
     const response = await anthropic.messages.create({
       model: CHAT_MODEL,
       max_tokens: 1024,
-      system: SYSTEM_PROMPT,
+      system: buildSystemPrompt(clinic),
       messages,
     });
 
