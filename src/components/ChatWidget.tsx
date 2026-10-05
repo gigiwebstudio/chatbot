@@ -72,6 +72,20 @@ export default function ChatWidget({
     });
   }, [messages, loading]);
 
+  // When embedded via public/embed.js, this widget renders inside an iframe
+  // that's just big enough to hold it - the host page itself can't see past
+  // the iframe's edges. Tell the loader script how much room we need so it
+  // can grow/shrink the iframe instead of always reserving the full open
+  // panel's space (which would block clicks on the host page around the
+  // closed button).
+  useEffect(() => {
+    if (window.parent === window) return; // not embedded in an iframe
+    window.parent.postMessage(
+      { source: "clinic-chat-widget", type: "resize", open },
+      "*"
+    );
+  }, [open]);
+
   async function sendMessage(overrideText?: string) {
     const text = (overrideText ?? input).trim();
     if (!text || loading) return;
