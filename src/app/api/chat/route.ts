@@ -9,7 +9,7 @@ import {
   type ClinicContact,
   type PractitionerLink,
 } from "@/lib/supabase";
-import { buildEmergencyResponse, detectEmergency, detectLanguage } from "@/lib/safety";
+import { detectLanguage, getSafetyPack } from "@/lib/safety";
 
 export const runtime = "nodejs";
 
@@ -263,13 +263,19 @@ export async function POST(req: NextRequest) {
 
   const { clinicId, message, history } = parsed;
 
-  // 0. Hard emergency gate - runs before any embedding/LLM call. See
-  // src/lib/safety.ts for why this is keyword-based rather than model-based.
-  if (detectEmergency(message)) {
-    console.warn("Emergency keyword detected, escalating.", { clinicId });
-    const clinic = await getClinicContact(clinicId);
+  // 0. Fetch the clinic's contact info and vertical first - the escalation
+  // gate right below is vertical-specific (see src/lib/safety/), so we need
+  // to know which pack to check against before we can run it. This is the
+  // one DB round-trip every request now pays up front; the gate itself stays
+  // keyword-based rather than model-based, so it still never costs an
+  // embedding or LLM call.
+  const clinic = await getClinicContact(clinicId);
+  const safetyPack = getSafetyPack(clinic?.vertical);
+
+  if (safetyPack.detectEscalation(message)) {
+    console.warn("Escalation keyword detected, escalating.", { clinicId, vertical: clinic?.vertical });
     return NextResponse.json({
-      reply: buildEmergencyResponse(clinic, detectLanguage(message)),
+      reply: safetyPack.buildEscalationResponse(clinic, detectLanguage(message)),
       sources: [],
       escalate: true,
     });
@@ -277,13 +283,11 @@ export async function POST(req: NextRequest) {
 
   try {
     // 1. Embed the user's question, and separately fetch the clinic's full
-    // practitioner roster (used later to correct booking links) and contact
-    // info (used to template the system prompt below) - these don't depend
-    // on each other, so run them in parallel.
-    const [queryEmbedding, roster, clinic] = await Promise.all([
+    // practitioner roster (used later to correct booking links) - these
+    // don't depend on each other, so run them in parallel.
+    const [queryEmbedding, roster] = await Promise.all([
       embedQuery(message),
       getAllPractitioners(clinicId),
-      getClinicContact(clinicId),
     ]);
 
     // 2. Retrieve relevant knowledge-base chunks from Supabase (pgvector),

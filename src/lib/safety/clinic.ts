@@ -1,4 +1,5 @@
-import type { ClinicContact } from "./supabase";
+import type { ClinicContact } from "@/lib/supabase";
+import type { SafetyPack, SupportedLanguage } from "./types";
 
 // Hard, deterministic emergency gate - runs before any embedding/LLM call.
 // Per CLAUDE.md: "증상/응급 관련 키워드는 LLM 호출 전에 필터링해서 무조건
@@ -117,23 +118,11 @@ const EMERGENCY_PATTERNS: (string | RegExp)[] = [
   "救護車",
 ];
 
-export function detectEmergency(message: string): boolean {
+function detectEscalation(message: string): boolean {
   const normalized = message.toLowerCase();
   return EMERGENCY_PATTERNS.some((pattern) =>
     typeof pattern === "string" ? normalized.includes(pattern.toLowerCase()) : pattern.test(message)
   );
-}
-
-export type SupportedLanguage = "en" | "ko" | "zh";
-
-// Cheap, deterministic (no LLM call, keeping the emergency path fast and
-// auditable) - Hangul presence means Korean; CJK ideographs without Hangul
-// means Chinese; otherwise default to English. Good enough to pick the one
-// language the patient is actually reading in for a short emergency notice.
-export function detectLanguage(message: string): SupportedLanguage {
-  if (/[가-힣ᄀ-ᇿ㄰-㆏]/.test(message)) return "ko";
-  if (/[一-鿿]/.test(message)) return "zh";
-  return "en";
 }
 
 const EMERGENCY_LINES: Record<SupportedLanguage, string[]> = {
@@ -166,7 +155,7 @@ const CONTACT_LABEL: Record<SupportedLanguage, (name: string) => string> = {
   zh: (name) => `联系${name}:`,
 };
 
-export function buildEmergencyResponse(
+function buildEscalationResponse(
   clinic: ClinicContact | null,
   language: SupportedLanguage = "en"
 ): string {
@@ -179,3 +168,8 @@ export function buildEmergencyResponse(
     "\n"
   );
 }
+
+export const clinicSafetyPack: SafetyPack = {
+  detectEscalation,
+  buildEscalationResponse,
+};

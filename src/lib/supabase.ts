@@ -92,10 +92,12 @@ export interface ClinicContact {
   name: string;
   phone: string | null;
   email: string | null;
+  vertical: string;
 }
 
-// Used by the emergency-escalation gate (src/lib/safety.ts), which must
-// respond without an embedding/LLM round-trip - a plain row lookup, no RAG.
+// Used by the escalation gate (src/lib/safety/) to pick the right pack and
+// build its response, and by the chat route to template the system prompt -
+// a plain row lookup, no RAG.
 export async function getClinicContact(
   clinicId: string
 ): Promise<ClinicContact | null> {
@@ -103,7 +105,7 @@ export async function getClinicContact(
 
   const { data, error } = await supabase
     .from("clinics")
-    .select("name, phone, email")
+    .select("name, phone, email, vertical")
     .eq("id", clinicId)
     .maybeSingle();
 
