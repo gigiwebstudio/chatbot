@@ -4,7 +4,8 @@
     "name": "Joayo Therapy",
     "booking_url": "https://joayotherapy.janeapp.com/#/team",
     "phone": "604-558-1347",
-    "email": "info@joayotherapy.ca"
+    "email": "info@joayotherapy.ca",
+    "vertical": "clinic"
   },
   "documents": [
     {

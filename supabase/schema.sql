@@ -15,11 +15,17 @@ create table if not exists clinics (
   -- reply without an embedding/LLM round-trip - so it can't come from `documents`.
   phone text,
   email text,
+  -- Which vertical this clinic belongs to - selects the safety/prompt pack to
+  -- load at runtime (e.g. 'clinic', 'law_firm', 'accounting'). Plain text, not
+  -- a check-constrained enum: the set of verticals is still being decided, and
+  -- validating it belongs in the pack-loading code, not a schema migration.
+  vertical text not null default 'clinic',
   created_at timestamptz not null default now()
 );
 
 alter table clinics add column if not exists phone text;
 alter table clinics add column if not exists email text;
+alter table clinics add column if not exists vertical text not null default 'clinic';
 
 create table if not exists documents (
   id bigserial primary key,
