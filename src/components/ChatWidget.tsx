@@ -220,7 +220,10 @@ export default function ChatWidget({
               onKeyDown={handleKeyDown}
               rows={1}
               placeholder="Type a message..."
-              className="max-h-24 flex-1 resize-none rounded-xl border border-black/10 bg-white px-3 py-2 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400"
+              // 16px (text-base) is the iOS Safari/WebKit threshold below
+              // which focusing an input auto-zooms the page - this stays at
+              // or above that regardless of the rest of the UI's text size.
+              className="max-h-24 flex-1 resize-none rounded-xl border border-black/10 bg-white px-3 py-2 text-base text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400"
             />
             <button
               onClick={() => sendMessage()}
