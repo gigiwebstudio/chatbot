@@ -56,15 +56,26 @@ export interface PractitionerLink {
   bookingUrl: string;
 }
 
-// Full clinic roster (name -> booking_url), independent of similarity
-// search. Used to correct practitioner links in the LLM's reply - matching
-// against only that turn's top-K retrieved docs isn't enough, since the
-// correct person's own doc may not have been retrieved (e.g. a massage
-// question won't surface the chiropractor's doc), leaving a hallucinated
-// or wrong-practitioner link with nothing to check it against.
-export async function getAllPractitioners(
+export interface ServiceLink {
+  service: string;
+  sourceUrl: string;
+}
+
+export interface ClinicLinkables {
+  practitioners: PractitionerLink[];
+  services: ServiceLink[];
+}
+
+// Full clinic roster of practitioners and services, independent of
+// similarity search - one query, used to correct both practitioner and
+// service links in the LLM's reply. Matching against only that turn's
+// top-K retrieved docs isn't enough, since the correct doc may not have
+// been retrieved (e.g. a massage question won't surface the chiropractor's
+// doc), leaving a hallucinated or wrong link with nothing to check it
+// against.
+export async function getClinicLinkables(
   clinicId: string
-): Promise<PractitionerLink[]> {
+): Promise<ClinicLinkables> {
   const supabase = getSupabaseClient();
 
   const { data, error } = await supabase
@@ -73,19 +84,36 @@ export async function getAllPractitioners(
     .eq("clinic_id", clinicId);
 
   if (error) {
-    throw new Error(`Failed to fetch practitioner roster: ${error.message}`);
+    throw new Error(`Failed to fetch clinic roster: ${error.message}`);
   }
 
-  const seen = new Map<string, string>();
+  const practitioners = new Map<string, string>();
+  const services = new Map<string, string>();
   for (const row of data ?? []) {
     const meta = (row as { metadata: Record<string, unknown> }).metadata;
+
     const name = meta.name ?? meta.practitioner;
-    const url = meta.booking_url;
-    if (typeof name === "string" && typeof url === "string" && !seen.has(name)) {
-      seen.set(name, url);
+    const bookingUrl = meta.booking_url;
+    if (typeof name === "string" && typeof bookingUrl === "string" && !practitioners.has(name)) {
+      practitioners.set(name, bookingUrl);
+    }
+
+    // "billing" docs (ICBC, direct billing) are link targets the same way
+    // services are - their own content text doesn't always spell out the
+    // URL inline (direct-billing's doesn't), so without this they'd have no
+    // URL for Claude to copy even an approximate one from.
+    if (meta.category === "service" || meta.category === "billing") {
+      const service = meta.service;
+      const sourceUrl = meta.source_url;
+      if (typeof service === "string" && typeof sourceUrl === "string" && !services.has(service)) {
+        services.set(service, sourceUrl);
+      }
     }
   }
-  return Array.from(seen.entries()).map(([name, bookingUrl]) => ({ name, bookingUrl }));
+  return {
+    practitioners: Array.from(practitioners, ([name, bookingUrl]) => ({ name, bookingUrl })),
+    services: Array.from(services, ([service, sourceUrl]) => ({ service, sourceUrl })),
+  };
 }
 
 export interface ClinicContact {

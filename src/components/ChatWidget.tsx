@@ -150,6 +150,9 @@ export default function ChatWidget({
                 <p className="text-sm text-neutral-500">
                   Hi! Ask us about hours, services, or booking an appointment.
                 </p>
+                <p className="mt-1 text-xs text-neutral-400">
+                  💬 English · 한국어 · 中文 - just type in your language
+                </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {QUICK_REPLIES.map((qr) => (
                     <button

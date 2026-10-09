@@ -3,11 +3,12 @@ import Anthropic from "@anthropic-ai/sdk";
 import { CHAT_MODEL, getAnthropicClient } from "@/lib/anthropic";
 import { embedQuery } from "@/lib/voyage";
 import {
-  getAllPractitioners,
   getClinicContact,
+  getClinicLinkables,
   matchDocuments,
   type ClinicContact,
   type PractitionerLink,
+  type ServiceLink,
 } from "@/lib/supabase";
 import { detectLanguage, getSafetyPack } from "@/lib/safety";
 
@@ -80,9 +81,14 @@ line.
 Your reply is rendered as markdown in a chat bubble, so formatting is supported - use it
 sparingly and only when it improves readability: "**bold**" for a key term or number, a
 short bullet list ("- item") when giving 3+ options or steps, nothing fancier. Don't add
-a heading or bullets to a one-line answer. Business hours and a mailing address are 3+
-distinct facts crammed together - always break them into short lines or a bullet list
-(e.g. one line per day range) instead of one run-on sentence.
+a heading or bullets to a one-line answer. Business hours, a mailing address, and any
+multi-step process (booking steps, ICBC steps, direct billing steps) are 3+ things
+crammed together - always break them into short lines or a bullet list instead of one
+run-on paragraph.
+
+Avoid insurance/billing jargon - don't say "out-of-pocket cost" even if the reference
+material happens to phrase it that way; say "usually free for you" or "you won't have to
+pay" instead. Keep language plain regardless of the source wording.
 
 When the reference material gives pricing, you can share it, but always frame it as
 approximate and subject to change (e.g. "around $125" or "starting at $140," not a firm
@@ -112,10 +118,28 @@ practitioner's item. If you're not fully sure which URL belongs to the person yo
 naming, don't link at all rather than risk sending the patient to the wrong page.
 
 When you mention a specific service by name (Chiropractic, Acupuncture, Massage
-Therapy/RMT, Physiotherapy, Pilates, Kinesiology, Naturopathic Medicine) and that
-service's reference material includes a "source_url", link the service name to it,
-e.g. "[Chiropractic care](<source_url from the reference material>)" - same pattern
-as practitioner links. Don't invent a URL if the reference material doesn't give one.
+Therapy/RMT, Physiotherapy, Pilates, Kinesiology, Naturopathic Medicine, Direct Billing,
+ICBC) and that item's reference material includes a "source_url", link it, e.g.
+"[Chiropractic care](<source_url from the reference material>)" - same pattern as
+practitioner links. Don't invent a URL if the reference material doesn't give one.
+
+When the patient asks a broad overview or yes/no "do you offer/accept X" question
+(e.g. "what services do you offer", "do you offer direct billing or accept ICBC
+claims") rather than asking how something specific works, answer BRIEFLY - confirm
+what's offered as a short linked list or one line, and stop. Don't explain the full
+process (steps, forms, pricing) unless they ask about that one thing specifically or
+ask "how does X work." For example:
+- "What services do you offer?" -> just linked service names, no descriptions:
+  - [Massage Therapy (RMT)](<url>)
+  - [Physiotherapy](<url>)
+- "Do you offer direct billing or accept ICBC claims?" -> "Yes to both! [ICBC
+  claims](<url>) for motor vehicle accidents, and [direct billing](<url>) to 20+
+  insurers like Blue Cross and Sun Life. Want details on either?" - not the full
+  step-by-step for both.
+This is deliberately the one case where you skip the usual "explain how it works"
+detail - it's too long to read in a chat bubble for a question that was just asking
+"do you have this." If the patient then asks about one specific thing, describe that
+one in full using the reference material.
 
 If the patient asks a general "how do I book" question without naming a practitioner or
 service, give the general booking options (JaneApp portal / phone / email), then end your
@@ -124,8 +148,10 @@ particular practitioner or service you'd like to book?" Don't just mention that 
 links exist without asking; asking means you can hand them the direct link as soon as they
 answer.
 
-If the patient mentions an ICBC claim or motor vehicle accident, point them to the ICBC
-intake form on the clinic website as the primary next step - link it from the reference
+If the patient says they were actually in an accident or already has/is starting an ICBC
+claim (not just asking whether ICBC is accepted in general - that's the brief yes/no case
+above), point them to the ICBC intake form on the clinic website as the primary next step
+- link it from the reference
 material's source_url, e.g. "[ICBC intake form](<source_url from the reference material>)".
 It's faster for the clinic to process than a phone call or email, since it collects
 everything needed (claim number, adjuster details) in one submission. Never ask the
@@ -236,6 +262,50 @@ function fixPractitionerLinks(reply: string, roster: PractitionerLink[]): string
   });
 }
 
+// Service slugs aren't natural-language labels ("naturopathic-medicine"), so
+// match on whether all of a slug's hyphen-separated words appear in the link
+// text, plus a couple of aliases for services the system prompt tells Claude
+// to call something else ("Massage Therapy" for "rmt"). Aliases are
+// deliberately multi-word ("massage therapy", not just "massage") so they
+// don't accidentally match inside an unrelated sentence, e.g. a practitioner
+// link whose surrounding text happens to mention massage.
+const SERVICE_ALIASES: Record<string, string[]> = {
+  rmt: ["massage therapy"],
+  kinesiology: ["personal training"],
+};
+
+// Same rationale and mechanism as fixPractitionerLinks - Claude hallucinated
+// a single generic homepage URL for every service in testing (all 7 services
+// pointed at the same wrong link), so service links get the same
+// never-trust-the-model's-URL treatment, checked against the clinic's full
+// service list rather than just this turn's retrieved matches.
+function fixServiceLinks(reply: string, services: ServiceLink[]): string {
+  const known = services
+    .map(({ service, sourceUrl }) => ({
+      words: service.split("-").map((w) => w.toLowerCase()),
+      aliases: SERVICE_ALIASES[service] ?? [],
+      url: sourceUrl,
+    }))
+    .filter((k) => k.words.length > 0 && k.words.every(Boolean));
+
+  if (known.length === 0) return reply;
+
+  const linkRe = /\[([^\]]+)\]\(([^\s)]+)\)/g;
+
+  return reply.replace(linkRe, (full, linkText: string, url: string) => {
+    const linkLower = linkText.toLowerCase();
+    const candidates = known.filter(
+      (k) =>
+        k.words.every((w) => linkLower.includes(w)) ||
+        k.aliases.some((a) => linkLower.includes(a))
+    );
+    if (candidates.length === 1 && candidates[0].url !== url) {
+      return `[${linkText}](${candidates[0].url})`;
+    }
+    return full;
+  });
+}
+
 function buildContext(
   documents: { content: string; similarity: number }[]
 ): string {
@@ -282,13 +352,14 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // 1. Embed the user's question, and separately fetch the clinic's full
-    // practitioner roster (used later to correct booking links) - these
-    // don't depend on each other, so run them in parallel.
-    const [queryEmbedding, roster] = await Promise.all([
-      embedQuery(message),
-      getAllPractitioners(clinicId),
-    ]);
+    // 1. Kick off the clinic's practitioner/service roster fetch now, but
+    // don't await it yet - it's only needed after Claude replies (to correct
+    // links), so letting it run in the background while we embed, retrieve,
+    // and generate means it adds ~0ms to the critical path instead of
+    // blocking step 2 on a round-trip nothing downstream needs yet.
+    const linkablesPromise = getClinicLinkables(clinicId);
+
+    const queryEmbedding = await embedQuery(message);
 
     // 2. Retrieve relevant knowledge-base chunks from Supabase (pgvector),
     // scoped to this clinic only.
@@ -327,7 +398,11 @@ export async function POST(req: NextRequest) {
     const textBlock = response.content.find(
       (block): block is Anthropic.TextBlock => block.type === "text"
     );
-    const reply = fixPractitionerLinks(textBlock?.text ?? "", roster);
+    const linkables = await linkablesPromise;
+    const reply = fixServiceLinks(
+      fixPractitionerLinks(textBlock?.text ?? "", linkables.practitioners),
+      linkables.services
+    );
 
     return NextResponse.json({
       reply,
