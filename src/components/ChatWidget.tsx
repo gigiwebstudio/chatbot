@@ -198,8 +198,10 @@ export default function ChatWidget({
 
             {loading && (
               <div className="flex justify-start">
-                <div className="rounded-2xl bg-neutral-100 px-3 py-2 text-sm text-neutral-500">
-                  Typing...
+                <div className="flex items-center gap-1 rounded-2xl bg-neutral-100 px-3 py-2.5">
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.3s]" />
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]" />
+                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-neutral-400" />
                 </div>
               </div>
             )}

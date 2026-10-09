@@ -333,13 +333,21 @@ export async function POST(req: NextRequest) {
 
   const { clinicId, message, history } = parsed;
 
-  // 0. Fetch the clinic's contact info and vertical first - the escalation
-  // gate right below is vertical-specific (see src/lib/safety/), so we need
-  // to know which pack to check against before we can run it. This is the
-  // one DB round-trip every request now pays up front; the gate itself stays
-  // keyword-based rather than model-based, so it still never costs an
-  // embedding or LLM call.
-  const clinic = await getClinicContact(clinicId);
+  // 0. Fetch the clinic's contact info and vertical - the escalation gate
+  // below is vertical-specific (see src/lib/safety/), so we need it before
+  // we can run that check. Start the query embedding at the same time: the
+  // gate only has to block the LLM call itself ("LLM 호출 전" per
+  // CLAUDE.md), not the embedding call, so there's no reason to make
+  // embedQuery wait on a DB round-trip it doesn't depend on - that
+  // sequencing used to cost ~1s on every request.
+  const clinicPromise = getClinicContact(clinicId);
+  const embeddingPromise = embedQuery(message);
+  // If we escalate below, these results are discarded without ever being
+  // awaited - silence the "unhandled rejection" warning that would
+  // otherwise fire if the embedding call happens to fail in that window.
+  embeddingPromise.catch(() => {});
+
+  const clinic = await clinicPromise;
   const safetyPack = getSafetyPack(clinic?.vertical);
 
   if (safetyPack.detectEscalation(message)) {
@@ -359,7 +367,7 @@ export async function POST(req: NextRequest) {
     // blocking step 2 on a round-trip nothing downstream needs yet.
     const linkablesPromise = getClinicLinkables(clinicId);
 
-    const queryEmbedding = await embedQuery(message);
+    const queryEmbedding = await embeddingPromise;
 
     // 2. Retrieve relevant knowledge-base chunks from Supabase (pgvector),
     // scoped to this clinic only.
