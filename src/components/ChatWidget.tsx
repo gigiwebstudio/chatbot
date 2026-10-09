@@ -129,7 +129,7 @@ export default function ChatWidget({
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 font-sans">
       {open && (
-        <div className="flex h-[520px] w-[360px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white shadow-2xl">
+        <div className="flex h-[520px] w-[360px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white text-neutral-900 shadow-2xl scheme-light">
           <div className="flex items-center justify-between bg-neutral-900 px-4 py-3 text-white">
             <span className="font-medium">{clinicName} Chat</span>
             <button
@@ -220,7 +220,7 @@ export default function ChatWidget({
               onKeyDown={handleKeyDown}
               rows={1}
               placeholder="Type a message..."
-              className="max-h-24 flex-1 resize-none rounded-xl border border-black/10 px-3 py-2 text-sm outline-none focus:border-neutral-400"
+              className="max-h-24 flex-1 resize-none rounded-xl border border-black/10 bg-white px-3 py-2 text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400"
             />
             <button
               onClick={() => sendMessage()}
