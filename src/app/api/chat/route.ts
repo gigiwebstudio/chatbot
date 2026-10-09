@@ -42,6 +42,16 @@ function buildSystemPrompt(clinic: ClinicContact | null): string {
   always link it exactly this way.`
     : `- Email -> format as "[<email>](mailto:<email>)" using the address as it appears in the
   reference material.`;
+  const addressRule =
+    clinic?.address && clinic?.mapsUrl
+      ? `- Street address -> "[${clinic.address}](${clinic.mapsUrl})" - this is ${clinicName}'s
+  real address and maps link, always link it exactly this way. Never build a different maps
+  URL from the address text yourself, even if a document phrases the address slightly
+  differently.`
+      : `- Street address -> a Google Maps link built from whatever street address appears in the
+  reference material: "[<address>](https://www.google.com/maps/search/?api=1&query=<address>)",
+  where <address> in the URL has every space AND comma replaced with "+" (no commas in the URL).
+  Never invent an address that isn't in the reference material.`;
 
   return `You are the front-desk chatbot for ${clinicName}, a medical/wellness clinic in Vancouver, BC, Canada.
 Answer the patient's question only using the "Reference material" provided below, in a
@@ -99,10 +109,7 @@ Contact details must always be clickable links, in every reply, not just hours/l
 answers:
 ${phoneRule}
 ${emailRule}
-- Street address -> a Google Maps link built from whatever street address appears in the
-  reference material: "[<address>](https://www.google.com/maps/search/?api=1&query=<address>)",
-  where <address> in the URL has every space AND comma replaced with "+" (no commas in the URL).
-  Never invent an address that isn't in the reference material.
+${addressRule}
 Never write a bare phone number, email, or address with no link. Never use a different clinic's
 phone number, email, or address as an example or filler - always use ${clinicName}'s own values above.
 

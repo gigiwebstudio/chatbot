@@ -5,6 +5,8 @@
     "booking_url": "https://joayotherapy.janeapp.com/#/team",
     "phone": "604-558-1347",
     "email": "info@joayotherapy.ca",
+    "address": "Unit 100C, 4664 Lougheed Hwy, Burnaby, BC V5C 5T5",
+    "maps_url": "https://maps.app.goo.gl/PsGwuBYbP1NUyT5h7",
     "vertical": "clinic"
   },
   "documents": [
@@ -13,7 +15,7 @@
       "metadata": { "category": "general", "source_url": "https://joayotherapy.ca/our-clinic/" }
     },
     {
-      "content": "Joayo Therapy's business hours are Monday to Friday 9am-8pm, Saturday 9am-6pm, and Sunday 10am-5pm. The clinic address is Unit 100C, 4664 Lougheed Hwy, Burnaby, BC V5C 5T5. Phone: 604-558-1347. Email: info@joayotherapy.ca.",
+      "content": "Joayo Therapy's business hours are Monday to Friday 9:30am-8pm, Saturday 9:30am-6pm, and Sunday 10am-5pm. The clinic address is Unit 100C, 4664 Lougheed Hwy, Burnaby, BC V5C 5T5. Phone: 604-558-1347. Email: info@joayotherapy.ca.",
       "metadata": { "category": "hours_location", "source_url": "https://joayotherapy.ca/contact/" }
     },
     {
@@ -37,7 +39,7 @@
       "metadata": { "category": "service", "service": "chiropractic", "source_url": "https://joayotherapy.ca/service/chiropractic/" }
     },
     {
-      "content": "Joayo Therapy's acupuncture service addresses chronic pain, headaches, digestive issues, menstrual cramps, infertility, anxiety, and depression, and is also used to support sleep, energy, and general stress reduction. Additional online-booking categories include Facial Acupuncture, Body Contouring & Sculpting with Acupuncture, Pregnancy & Fertility Acupuncture, Advanced Tui-Na with Cupping, Foot Reflexology, Osteopathic Pelvic Floor with Acupuncture, ICBC Acupuncture, and a combined ICBC Acupuncture + RMT session. Practitioners use sterile needles under strict hygiene protocols. Approximate pricing (as of the clinic's last JaneApp price update): a standard session is $110-$125 depending on length; specialty treatments (facial acupuncture, fertility/pregnancy acupuncture, cupping, reflexology) range roughly $110-$210. ICBC-covered visits are usually free for the patient. Exact current pricing is confirmed at booking.",
+      "content": "Joayo Therapy's acupuncture service addresses chronic pain, headaches, digestive issues, menstrual cramps, infertility, anxiety, and depression, and is also used to support sleep, energy, and general stress reduction. Additional online-booking categories include Facial Acupuncture, Body Contouring & Sculpting with Acupuncture, Pregnancy & Fertility Acupuncture, Advanced Tui-Na with Cupping, Foot Reflexology, Osteopathic Pelvic Floor with Acupuncture, ICBC Acupuncture, and a combined ICBC Acupuncture + RMT session. Practitioners use sterile needles under strict hygiene protocols. Approximate pricing (as of the clinic's last JaneApp price update): a standard session is $110-$125 depending on length; specialty treatments (facial acupuncture, fertility/pregnancy acupuncture, cupping, reflexology) range roughly $110-$250, with a few premium facial acupuncture treatments (e.g. advanced microneedling with add-ons) up to $420. ICBC-covered visits are usually free for the patient. Exact current pricing is confirmed at booking.",
       "metadata": { "category": "service", "service": "acupuncture", "source_url": "https://joayotherapy.ca/service/acupuncture/" }
     },
     {
@@ -175,9 +177,8 @@
       "expires_at": "2026-09-30T23:59:59-07:00"
     },
     {
-      "content": "Joayo Therapy is currently running a limited-time promotion: 25% off a 10-session Active Rehab Personal Training package.",
-      "metadata": { "category": "promotion", "service": "personal-training", "source_url": "https://joayotherapy.janeapp.com/#/team" },
-      "expires_at": "2026-09-30T23:59:59-07:00"
+      "content": "Joayo Therapy is currently running a promotion: 25% off a 10-session Active Rehab Personal Training package (no end date has been set for this promotion yet).",
+      "metadata": { "category": "promotion", "service": "personal-training", "source_url": "https://joayotherapy.janeapp.com/#/team" }
     }
   ]
 }

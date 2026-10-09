@@ -15,6 +15,12 @@ create table if not exists clinics (
   -- reply without an embedding/LLM round-trip - so it can't come from `documents`.
   phone text,
   email text,
+  -- Real street address and a maps link to show patients - stored here
+  -- (rather than left to the LLM to build a search-query URL from address
+  -- text in a document) so it's never hallucinated or mangled. Same
+  -- rationale as phone/email above.
+  address text,
+  maps_url text,
   -- Which vertical this clinic belongs to - selects the safety/prompt pack to
   -- load at runtime (e.g. 'clinic', 'law_firm', 'accounting'). Plain text, not
   -- a check-constrained enum: the set of verticals is still being decided, and
@@ -26,6 +32,8 @@ create table if not exists clinics (
 alter table clinics add column if not exists phone text;
 alter table clinics add column if not exists email text;
 alter table clinics add column if not exists vertical text not null default 'clinic';
+alter table clinics add column if not exists address text;
+alter table clinics add column if not exists maps_url text;
 
 create table if not exists documents (
   id bigserial primary key,

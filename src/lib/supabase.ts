@@ -121,6 +121,8 @@ export interface ClinicContact {
   phone: string | null;
   email: string | null;
   vertical: string;
+  address: string | null;
+  mapsUrl: string | null;
 }
 
 // Used by the escalation gate (src/lib/safety/) to pick the right pack and
@@ -133,10 +135,17 @@ export async function getClinicContact(
 
   const { data, error } = await supabase
     .from("clinics")
-    .select("name, phone, email, vertical")
+    .select("name, phone, email, vertical, address, maps_url")
     .eq("id", clinicId)
     .maybeSingle();
 
   if (error || !data) return null;
-  return data as ClinicContact;
+  return {
+    name: data.name,
+    phone: data.phone,
+    email: data.email,
+    vertical: data.vertical,
+    address: data.address,
+    mapsUrl: data.maps_url,
+  };
 }

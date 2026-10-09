@@ -25,6 +25,8 @@ interface SeedFile {
     booking_url?: string;
     phone?: string;
     email?: string;
+    address?: string;
+    maps_url?: string;
     // Which safety/prompt pack this clinic loads at runtime. Omit for the
     // default 'clinic' vertical (see supabase/schema.sql).
     vertical?: string;
@@ -52,6 +54,8 @@ async function main() {
         booking_url: seed.clinic.booking_url ?? null,
         phone: seed.clinic.phone ?? null,
         email: seed.clinic.email ?? null,
+        address: seed.clinic.address ?? null,
+        maps_url: seed.clinic.maps_url ?? null,
         vertical: seed.clinic.vertical ?? "clinic",
       },
       { onConflict: "slug" }
