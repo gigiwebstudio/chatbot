@@ -131,21 +131,21 @@ const EMERGENCY_LINES: Record<SupportedLanguage, string[]> = {
     "",
     "Please call 911 or go to the nearest emergency room immediately.",
     "",
-    "I'm a chatbot and can't help with emergencies.",
+    "I'm an AI assistant and can't help with emergencies.",
   ],
   ko: [
     "⚠️ 이것은 응급 상황일 수 있습니다.",
     "",
     "즉시 911에 전화하시거나 가까운 응급실로 가주세요.",
     "",
-    "저는 챗봇이라 응급 상황을 도와드릴 수 없습니다.",
+    "저는 AI 어시스턴트라 응급 상황을 도와드릴 수 없습니다.",
   ],
   zh: [
     "⚠️ 这可能是紧急医疗情况。",
     "",
     "请立即拨打911或前往最近的急诊室。",
     "",
-    "我是聊天机器人,无法处理紧急情况。",
+    "我是AI助手,无法处理紧急情况。",
   ],
 };
 

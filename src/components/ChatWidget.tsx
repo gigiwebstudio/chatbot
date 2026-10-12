@@ -19,7 +19,10 @@ interface Message {
 // blank-input drop-off and convert better than an empty text box alone.
 // Free text stays available the whole time; these are just a head start.
 const QUICK_REPLIES = [
-  { label: "🩺 Our services", message: "What services do you offer?" },
+  {
+    label: "🤕 Not sure what I need",
+    message: "I'm not sure which service I need - can you help me figure out what to book?",
+  },
   { label: "📅 Book an appointment", message: "How do I book an appointment?" },
   { label: "🕒 Hours & location", message: "What are your hours and where are you located?" },
   { label: "💳 Insurance & billing", message: "Do you offer direct billing or accept ICBC claims?" },
@@ -126,19 +129,40 @@ export default function ChatWidget({
     }
   }
 
+  // Full reset, not "show the quick replies again below the old messages" -
+  // one unambiguous meaning ("start over") instead of leaving it unclear
+  // whether history is kept.
+  function resetConversation() {
+    setMessages([]);
+    setInput("");
+    setError(null);
+  }
+
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 font-sans">
       {open && (
         <div className="flex h-[520px] w-[360px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white text-neutral-900 shadow-2xl scheme-light">
           <div className="flex items-center justify-between bg-neutral-900 px-4 py-3 text-white">
-            <span className="font-medium">{clinicName} Chat</span>
-            <button
-              onClick={() => setOpen(false)}
-              aria-label="Close chat"
-              className="rounded p-1 text-white/80 hover:bg-white/10 hover:text-white"
-            >
-              ✕
-            </button>
+            <span className="font-medium">{clinicName} AI Assistant</span>
+            <div className="flex items-center gap-1">
+              {messages.length > 0 && (
+                <button
+                  onClick={resetConversation}
+                  aria-label="Start over"
+                  title="Start over"
+                  className="rounded p-1 text-white/80 hover:bg-white/10 hover:text-white"
+                >
+                  ↺
+                </button>
+              )}
+              <button
+                onClick={() => setOpen(false)}
+                aria-label="Close chat"
+                className="rounded p-1 text-white/80 hover:bg-white/10 hover:text-white"
+              >
+                ✕
+              </button>
+            </div>
           </div>
 
           <div
@@ -147,12 +171,7 @@ export default function ChatWidget({
           >
             {messages.length === 0 && (
               <div>
-                <p className="text-sm text-neutral-500">
-                  Hi! Ask us about hours, services, or booking an appointment.
-                </p>
-                <p className="mt-1 text-xs text-neutral-400">
-                  💬 English · 한국어 · 中文 - just type in your language
-                </p>
+                <p className="text-sm text-neutral-500">Hi! How can we help?</p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {QUICK_REPLIES.map((qr) => (
                     <button
@@ -219,7 +238,7 @@ export default function ChatWidget({
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
               rows={1}
-              placeholder="Type a message..."
+              placeholder="Type in English, 한국어, or 中文..."
               // 16px (text-base) is the iOS Safari/WebKit threshold below
               // which focusing an input auto-zooms the page - this stays at
               // or above that regardless of the rest of the UI's text size.
