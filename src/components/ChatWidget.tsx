@@ -229,21 +229,27 @@ export default function ChatWidget({
                     real assistant message (not full-width) - reads as the
                     bot talking and offering options, not a separate menu
                     bolted on below it. */}
-                <div className="max-w-[92%] overflow-hidden rounded-2xl bg-neutral-100 text-sm text-neutral-900">
-                  <div className="px-3 py-2 font-medium">Hi! How can we help?</div>
-                  {QUICK_REPLIES.map((qr) => (
-                    <button
-                      key={qr.label}
-                      onClick={() => sendMessage(qr.message)}
-                      disabled={loading}
-                      className="flex w-full items-center justify-between gap-2 border-t border-black/10 px-3 py-2.5 text-left font-medium text-neutral-700 transition hover:bg-neutral-200/60 disabled:opacity-40"
-                    >
-                      <span>{qr.label}</span>
-                      <span aria-hidden className="text-neutral-400">
-                        ›
-                      </span>
-                    </button>
-                  ))}
+                <div className="max-w-[97%] rounded-2xl bg-neutral-100 p-2 text-sm text-neutral-900">
+                  <div className="px-1.5 py-1.5 font-medium">Hi! How can we help?</div>
+                  {/* Each reply is its own white card inside the grey bubble,
+                      not a row separated by a divider line - color contrast
+                      against the bubble reads as "button" on its own,
+                      without needing a shared background with the greeting. */}
+                  <div className="mt-1 flex flex-col gap-1.5">
+                    {QUICK_REPLIES.map((qr) => (
+                      <button
+                        key={qr.label}
+                        onClick={() => sendMessage(qr.message)}
+                        disabled={loading}
+                        className="flex items-center justify-between gap-2 rounded-xl border border-black/10 bg-white px-3 py-2.5 text-left font-medium text-neutral-700 transition hover:border-black/20 hover:bg-neutral-50 disabled:opacity-40"
+                      >
+                        <span>{qr.label}</span>
+                        <span aria-hidden className="text-neutral-300">
+                          ›
+                        </span>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
