@@ -235,7 +235,12 @@ export default function ChatWidget({
                   real assistant message (not full-width) - reads as the
                   bot talking and offering options, not a separate menu
                   bolted on below it. */}
-              <div className="max-w-[85%] rounded-2xl bg-neutral-100 p-3 text-sm text-neutral-900">
+              {/* w-full (not just max-w) - the other bubbles only look
+                  85% wide because their text is long enough to wrap at
+                  that cap; this one's content (short button labels) never
+                  needs that much space, so without w-full it just shrinks
+                  to fit instead of matching their width. */}
+              <div className="w-full max-w-[85%] rounded-2xl bg-neutral-100 p-3 text-sm text-neutral-900">
                 <div className="px-2 py-2 font-medium">Hi! How can we help?</div>
                 {/* Each reply is its own white card inside the grey bubble,
                     not a row separated by a divider line - color contrast
