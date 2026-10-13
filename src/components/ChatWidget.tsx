@@ -70,6 +70,40 @@ export default function ChatWidget({
   // Tracks the in-flight /api/chat request so "start over" can cancel it
   // instead of letting a stale reply land after the conversation's moved on.
   const abortControllerRef = useRef<AbortController | null>(null);
+  // Created lazily on first send (a user gesture) rather than on mount, so
+  // the browser's autoplay policy doesn't silently block it - reused across
+  // the whole conversation instead of a new context per message.
+  const audioCtxRef = useRef<AudioContext | null>(null);
+
+  // A short two-tone "ding" for incoming replies, synthesized instead of
+  // shipping an audio file - two quick sine tones a few semitones apart
+  // reads as a pleasant notification chime rather than a harsh beep.
+  function playNotificationSound() {
+    try {
+      const ctx = audioCtxRef.current ?? new AudioContext();
+      audioCtxRef.current = ctx;
+      if (ctx.state === "suspended") void ctx.resume();
+
+      const now = ctx.currentTime;
+      [880, 1175].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.value = freq;
+        const start = now + i * 0.09;
+        gain.gain.setValueAtTime(0, start);
+        gain.gain.linearRampToValueAtTime(0.15, start + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.18);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(start);
+        osc.stop(start + 0.2);
+      });
+    } catch {
+      // Not critical to the chat working - skip silently if the browser
+      // blocks or doesn't support Web Audio.
+    }
+  }
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -122,6 +156,7 @@ export default function ChatWidget({
         ...prev,
         { role: "assistant", content: data.reply, escalate: data.escalate },
       ]);
+      playNotificationSound();
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") {
         // Cancelled by resetConversation() - the conversation already moved
@@ -156,16 +191,20 @@ export default function ChatWidget({
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 font-sans">
       {open && (
-        <div className="flex h-[520px] w-[360px] max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white text-neutral-900 shadow-2xl scheme-light">
+        <div className="flex h-160 max-h-[calc(100vh-2rem)] w-90 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white text-neutral-900 shadow-2xl scheme-light">
           <div className="flex items-center justify-between bg-neutral-900 px-4 py-3 text-white">
             <span className="font-medium">{clinicName} AI Assistant</span>
+            {/* Fixed-size flex-centered boxes, not just padding around a
+                character - different glyphs (↺ vs ✕) have different font
+                metrics, so centering via text baseline left them visibly
+                misaligned with each other even at identical padding. */}
             <div className="flex items-center gap-1">
               {messages.length > 0 && (
                 <button
                   onClick={resetConversation}
                   aria-label="Start over"
                   title="Start over"
-                  className="rounded p-1 text-lg leading-none text-white/80 hover:bg-white/10 hover:text-white"
+                  className="flex h-8 w-8 items-center justify-center rounded text-xl leading-none text-white/80 hover:bg-white/10 hover:text-white"
                 >
                   ↺
                 </button>
@@ -173,7 +212,7 @@ export default function ChatWidget({
               <button
                 onClick={() => setOpen(false)}
                 aria-label="Close chat"
-                className="rounded p-1 text-white/80 hover:bg-white/10 hover:text-white"
+                className="flex h-8 w-8 items-center justify-center rounded text-xl leading-none text-white/80 hover:bg-white/10 hover:text-white"
               >
                 ✕
               </button>
@@ -186,7 +225,11 @@ export default function ChatWidget({
           >
             {messages.length === 0 && (
               <div>
-                <p className="text-base font-semibold text-neutral-900">Hi! How can we help?</p>
+                <div className="flex justify-start">
+                  <div className="max-w-[85%] rounded-2xl bg-neutral-100 px-3 py-2 text-left text-sm font-medium text-neutral-900">
+                    Hi! How can we help?
+                  </div>
+                </div>
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   {QUICK_REPLIES.map((qr) => (
                     <button
@@ -235,7 +278,7 @@ export default function ChatWidget({
 
             {loading && (
               <div className="flex justify-start">
-                <div className="flex items-center gap-1 rounded-2xl bg-neutral-100 px-3 py-2.5">
+                <div className="flex items-center gap-1.5 rounded-2xl bg-neutral-100 px-4 py-4">
                   <span className="h-1.5 w-1.5 rounded-full bg-neutral-400 animate-[bouncy-dot_0.8s_ease-in-out_-0.32s_infinite]" />
                   <span className="h-1.5 w-1.5 rounded-full bg-neutral-400 animate-[bouncy-dot_0.8s_ease-in-out_-0.16s_infinite]" />
                   <span className="h-1.5 w-1.5 rounded-full bg-neutral-400 animate-[bouncy-dot_0.8s_ease-in-out_0s_infinite]" />
@@ -250,26 +293,29 @@ export default function ChatWidget({
             )}
           </div>
 
-          <div className="flex items-end gap-2 border-t border-black/10 p-3">
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              rows={1}
-              placeholder="Type in English, 한국어, or 中文..."
-              // 16px (text-base) is the iOS Safari/WebKit threshold below
-              // which focusing an input auto-zooms the page - stay at that
-              // on narrow (phone) viewports, but match the rest of the UI's
-              // 14px on desktop where auto-zoom doesn't happen.
-              className="max-h-24 flex-1 resize-none rounded-xl border border-black/10 bg-white px-3 py-2 text-base sm:text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400"
-            />
-            <button
-              onClick={() => sendMessage()}
-              disabled={loading || !input.trim()}
-              className="rounded-xl bg-neutral-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-40"
-            >
-              Send
-            </button>
+          <div className="border-t border-black/10 p-3">
+            <div className="flex items-end gap-2 rounded-2xl border border-black/10 bg-white py-1.5 pl-3 pr-1.5 focus-within:border-neutral-400">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                rows={1}
+                placeholder="Type in English, 한국어, or 中文..."
+                // 16px (text-base) is the iOS Safari/WebKit threshold below
+                // which focusing an input auto-zooms the page - stay at that
+                // on narrow (phone) viewports, but match the rest of the UI's
+                // 14px on desktop where auto-zoom doesn't happen.
+                className="max-h-24 flex-1 resize-none bg-transparent py-1 text-base text-neutral-900 outline-none placeholder:text-neutral-400 sm:text-sm"
+              />
+              <button
+                onClick={() => sendMessage()}
+                disabled={loading || !input.trim()}
+                aria-label="Send message"
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-neutral-900 text-white disabled:opacity-40"
+              >
+                <span aria-hidden className="text-base leading-none">↑</span>
+              </button>
+            </div>
           </div>
         </div>
       )}
