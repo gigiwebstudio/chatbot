@@ -67,6 +67,9 @@ export default function ChatWidget({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  // Tracks the in-flight /api/chat request so "start over" can cancel it
+  // instead of letting a stale reply land after the conversation's moved on.
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({
@@ -99,11 +102,15 @@ export default function ChatWidget({
     setMessages((prev) => [...prev, { role: "user", content: text }]);
     setLoading(true);
 
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ clinicId, message: text, history }),
+        signal: controller.signal,
       });
       const data = await res.json();
 
@@ -116,6 +123,11 @@ export default function ChatWidget({
         { role: "assistant", content: data.reply, escalate: data.escalate },
       ]);
     } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        // Cancelled by resetConversation() - the conversation already moved
+        // on, so there's nothing to show for this request.
+        return;
+      }
       setError(err instanceof Error ? err.message : "Something went wrong.");
     } finally {
       setLoading(false);
@@ -131,11 +143,14 @@ export default function ChatWidget({
 
   // Full reset, not "show the quick replies again below the old messages" -
   // one unambiguous meaning ("start over") instead of leaving it unclear
-  // whether history is kept.
+  // whether history is kept. Cancels any in-flight reply so it can't land
+  // after the reset and get appended to the (now empty) conversation.
   function resetConversation() {
+    abortControllerRef.current?.abort();
     setMessages([]);
     setInput("");
     setError(null);
+    setLoading(false);
   }
 
   return (
@@ -150,7 +165,7 @@ export default function ChatWidget({
                   onClick={resetConversation}
                   aria-label="Start over"
                   title="Start over"
-                  className="rounded p-1 text-white/80 hover:bg-white/10 hover:text-white"
+                  className="rounded p-1 text-lg leading-none text-white/80 hover:bg-white/10 hover:text-white"
                 >
                   ↺
                 </button>
@@ -171,8 +186,8 @@ export default function ChatWidget({
           >
             {messages.length === 0 && (
               <div>
-                <p className="text-sm text-neutral-500">Hi! How can we help?</p>
-                <div className="mt-3 flex flex-wrap gap-2">
+                <p className="text-base font-semibold text-neutral-900">Hi! How can we help?</p>
+                <div className="mt-3 grid grid-cols-2 gap-2">
                   {QUICK_REPLIES.map((qr) => (
                     <button
                       key={qr.label}
@@ -218,9 +233,9 @@ export default function ChatWidget({
             {loading && (
               <div className="flex justify-start">
                 <div className="flex items-center gap-1 rounded-2xl bg-neutral-100 px-3 py-2.5">
-                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.3s]" />
-                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-neutral-400 [animation-delay:-0.15s]" />
-                  <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-neutral-400" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-neutral-400 animate-[bouncy-dot_0.8s_ease-in-out_-0.32s_infinite]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-neutral-400 animate-[bouncy-dot_0.8s_ease-in-out_-0.16s_infinite]" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-neutral-400 animate-[bouncy-dot_0.8s_ease-in-out_0s_infinite]" />
                 </div>
               </div>
             )}
@@ -240,9 +255,10 @@ export default function ChatWidget({
               rows={1}
               placeholder="Type in English, 한국어, or 中文..."
               // 16px (text-base) is the iOS Safari/WebKit threshold below
-              // which focusing an input auto-zooms the page - this stays at
-              // or above that regardless of the rest of the UI's text size.
-              className="max-h-24 flex-1 resize-none rounded-xl border border-black/10 bg-white px-3 py-2 text-base text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400"
+              // which focusing an input auto-zooms the page - stay at that
+              // on narrow (phone) viewports, but match the rest of the UI's
+              // 14px on desktop where auto-zoom doesn't happen.
+              className="max-h-24 flex-1 resize-none rounded-xl border border-black/10 bg-white px-3 py-2 text-base sm:text-sm text-neutral-900 outline-none placeholder:text-neutral-400 focus:border-neutral-400"
             />
             <button
               onClick={() => sendMessage()}
