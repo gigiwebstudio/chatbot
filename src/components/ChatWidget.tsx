@@ -229,16 +229,19 @@ export default function ChatWidget({
                     real assistant message (not full-width) - reads as the
                     bot talking and offering options, not a separate menu
                     bolted on below it. */}
-                <div className="max-w-[85%] overflow-hidden rounded-2xl bg-neutral-100 text-sm text-neutral-900">
+                <div className="max-w-[92%] overflow-hidden rounded-2xl bg-neutral-100 text-sm text-neutral-900">
                   <div className="px-3 py-2 font-medium">Hi! How can we help?</div>
                   {QUICK_REPLIES.map((qr) => (
                     <button
                       key={qr.label}
                       onClick={() => sendMessage(qr.message)}
                       disabled={loading}
-                      className="block w-full border-t border-black/10 px-3 py-2.5 text-left font-medium text-neutral-700 transition hover:bg-neutral-200/60 disabled:opacity-40"
+                      className="flex w-full items-center justify-between gap-2 border-t border-black/10 px-3 py-2.5 text-left font-medium text-neutral-700 transition hover:bg-neutral-200/60 disabled:opacity-40"
                     >
-                      {qr.label}
+                      <span>{qr.label}</span>
+                      <span aria-hidden className="text-neutral-400">
+                        ›
+                      </span>
                     </button>
                   ))}
                 </div>
