@@ -224,29 +224,21 @@ export default function ChatWidget({
             className="flex-1 space-y-3 overflow-y-auto px-4 py-3"
           >
             {messages.length === 0 && (
-              <div>
-                <div className="flex justify-start">
-                  <div className="max-w-[85%] rounded-2xl bg-neutral-100 px-3 py-2 text-left text-sm font-medium text-neutral-900">
-                    Hi! How can we help?
-                  </div>
-                </div>
-                {/* WhatsApp-style option list: one bordered card, full-width
-                    rows separated by thin dividers, instead of a grid of
-                    separate pill buttons. */}
-                <div className="mt-3 overflow-hidden rounded-xl border border-black/10">
-                  {QUICK_REPLIES.map((qr, i) => (
+              <div className="flex justify-start">
+                {/* Greeting + quick replies as one bubble, same width as a
+                    real assistant message (not full-width) - reads as the
+                    bot talking and offering options, not a separate menu
+                    bolted on below it. */}
+                <div className="max-w-[85%] overflow-hidden rounded-2xl bg-neutral-100 text-sm text-neutral-900">
+                  <div className="px-3 py-2 font-medium">Hi! How can we help?</div>
+                  {QUICK_REPLIES.map((qr) => (
                     <button
                       key={qr.label}
                       onClick={() => sendMessage(qr.message)}
                       disabled={loading}
-                      className={`flex w-full items-center justify-between gap-2 bg-white px-3 py-2.5 text-left text-sm font-medium text-neutral-700 transition hover:bg-neutral-50 disabled:opacity-40 ${
-                        i > 0 ? "border-t border-black/10" : ""
-                      }`}
+                      className="block w-full border-t border-black/10 px-3 py-2.5 text-left font-medium text-neutral-700 transition hover:bg-neutral-200/60 disabled:opacity-40"
                     >
-                      <span>{qr.label}</span>
-                      <span aria-hidden className="text-neutral-300">
-                        ›
-                      </span>
+                      {qr.label}
                     </button>
                   ))}
                 </div>
