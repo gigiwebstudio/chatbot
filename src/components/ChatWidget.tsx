@@ -191,7 +191,10 @@ export default function ChatWidget({
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 font-sans">
       {open && (
-        <div className="flex h-160 max-h-[calc(100vh-2rem)] w-90 max-w-[calc(100vw-2rem)] flex-col overflow-hidden rounded-2xl border border-black/10 bg-white text-neutral-900 shadow-2xl scheme-light">
+        // Full-screen below the sm breakpoint (closed via the header X, not
+        // a separate "mobile mode") - a floating 420x760 card above it,
+        // same as before, just bigger.
+        <div className="fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden border-0 bg-white text-neutral-900 shadow-none scheme-light sm:static sm:inset-auto sm:h-190 sm:max-h-[calc(100vh-2rem)] sm:w-105 sm:max-w-[calc(100vw-2rem)] sm:rounded-2xl sm:border sm:border-black/10 sm:shadow-2xl">
           <div className="flex items-center justify-between bg-neutral-900 px-4 py-3 text-white">
             <span className="font-medium">{clinicName} AI Assistant</span>
             {/* Fixed-size flex-centered boxes, not just padding around a
@@ -223,36 +226,38 @@ export default function ChatWidget({
             ref={scrollRef}
             className="flex-1 space-y-3 overflow-y-auto px-4 py-3"
           >
-            {messages.length === 0 && (
-              <div className="flex justify-start">
-                {/* Greeting + quick replies as one bubble, same width as a
-                    real assistant message (not full-width) - reads as the
-                    bot talking and offering options, not a separate menu
-                    bolted on below it. */}
-                <div className="max-w-[97%] rounded-2xl bg-neutral-100 p-2 text-sm text-neutral-900">
-                  <div className="px-1.5 py-1.5 font-medium">Hi! How can we help?</div>
-                  {/* Each reply is its own white card inside the grey bubble,
-                      not a row separated by a divider line - color contrast
-                      against the bubble reads as "button" on its own,
-                      without needing a shared background with the greeting. */}
-                  <div className="mt-1 flex flex-col gap-1.5">
-                    {QUICK_REPLIES.map((qr) => (
-                      <button
-                        key={qr.label}
-                        onClick={() => sendMessage(qr.message)}
-                        disabled={loading}
-                        className="flex items-center justify-between gap-2 rounded-xl border border-black/10 bg-white px-3 py-2.5 text-left font-medium text-neutral-700 transition hover:border-black/20 hover:bg-neutral-50 disabled:opacity-40"
-                      >
-                        <span>{qr.label}</span>
-                        <span aria-hidden className="text-neutral-300">
-                          ›
-                        </span>
-                      </button>
-                    ))}
-                  </div>
+            {/* Always visible, not just before the first message - the
+                patient can tap another option any time without needing
+                "start over" first, and the conversation just continues
+                below instead of replacing this with a blank thread. */}
+            <div className="flex justify-start">
+              {/* Greeting + quick replies as one bubble, same width as a
+                  real assistant message (not full-width) - reads as the
+                  bot talking and offering options, not a separate menu
+                  bolted on below it. */}
+              <div className="max-w-[97%] rounded-2xl bg-neutral-100 p-3 text-sm text-neutral-900">
+                <div className="px-2 py-2 font-medium">Hi! How can we help?</div>
+                {/* Each reply is its own white card inside the grey bubble,
+                    not a row separated by a divider line - color contrast
+                    against the bubble reads as "button" on its own,
+                    without needing a shared background with the greeting. */}
+                <div className="mt-1 flex flex-col gap-1.5">
+                  {QUICK_REPLIES.map((qr) => (
+                    <button
+                      key={qr.label}
+                      onClick={() => sendMessage(qr.message)}
+                      disabled={loading}
+                      className="flex items-center justify-between gap-2 rounded-xl border border-black/10 bg-white px-4 py-3 text-left font-medium text-neutral-700 transition hover:border-black/20 hover:bg-neutral-50 disabled:opacity-40"
+                    >
+                      <span>{qr.label}</span>
+                      <span aria-hidden className="text-neutral-300">
+                        ›
+                      </span>
+                    </button>
+                  ))}
                 </div>
               </div>
-            )}
+            </div>
 
             {messages.map((m, i) => (
               <div
@@ -260,7 +265,7 @@ export default function ChatWidget({
                 className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[85%] rounded-2xl px-3 py-2 text-left text-sm ${
+                  className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-left text-sm ${
                     m.role === "user"
                       ? "whitespace-pre-wrap bg-neutral-900 text-white"
                       : m.escalate
@@ -293,14 +298,14 @@ export default function ChatWidget({
             )}
 
             {error && (
-              <div className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-700">
                 {error}
               </div>
             )}
           </div>
 
           <div className="border-t border-black/10 p-3">
-            <div className="flex items-end gap-2 rounded-2xl border border-black/10 bg-white py-1.5 pl-3 pr-1.5 focus-within:border-neutral-400">
+            <div className="flex items-end gap-2 rounded-2xl border border-black/10 bg-white py-2 pl-4 pr-1.5 focus-within:border-neutral-400">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -329,7 +334,10 @@ export default function ChatWidget({
       <button
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Close chat" : "Open chat"}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-neutral-900 text-2xl text-white shadow-xl transition hover:scale-105"
+        // On mobile, the open panel is full-screen and covers this button
+        // anyway (closing happens via the header X instead) - hide it
+        // outright rather than leaving a redundant control floating on top.
+        className={`${open ? "hidden sm:flex" : "flex"} h-14 w-14 items-center justify-center rounded-full bg-neutral-900 text-2xl text-white shadow-xl transition hover:scale-105`}
       >
         {open ? "✕" : "💬"}
       </button>
