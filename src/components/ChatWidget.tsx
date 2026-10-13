@@ -23,7 +23,7 @@ const QUICK_REPLIES = [
     label: "🤕 Not sure what I need",
     message: "I'm not sure which service I need - can you help me figure out what to book?",
   },
-  { label: "📅 Book an appointment", message: "How do I book an appointment?" },
+  { label: "📅 Book appointment", message: "How do I book an appointment?" },
   { label: "🕒 Hours & location", message: "What are your hours and where are you located?" },
   { label: "💳 Insurance & billing", message: "Do you offer direct billing or accept ICBC claims?" },
 ];
@@ -193,7 +193,10 @@ export default function ChatWidget({
                       key={qr.label}
                       onClick={() => sendMessage(qr.message)}
                       disabled={loading}
-                      className="rounded-full border border-black/10 bg-white px-3 py-1.5 text-left text-xs font-medium text-neutral-700 transition hover:border-black/20 hover:bg-neutral-50 disabled:opacity-40"
+                      // rounded-xl, not rounded-full - a pill shape stretches
+                      // into an odd elongated capsule once a label wraps to
+                      // two lines in the 2-column grid.
+                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-left text-xs font-medium text-neutral-700 transition hover:border-black/20 hover:bg-neutral-50 disabled:opacity-40"
                     >
                       {qr.label}
                     </button>
