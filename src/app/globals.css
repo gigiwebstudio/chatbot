@@ -37,3 +37,26 @@ body {
     transform: translateY(-7px) scale(1.2);
   }
 }
+
+/* Mobile full-screen panel open/close - slides up from the bottom like a
+   native sheet, instead of just popping in/out with no transition. */
+@keyframes panel-enter {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes panel-exit {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}

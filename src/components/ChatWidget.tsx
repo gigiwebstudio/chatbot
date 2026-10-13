@@ -15,6 +15,11 @@ interface Message {
   escalate?: boolean;
 }
 
+// Matches the panel-exit animation's duration in globals.css - how long
+// closeChat() keeps the panel mounted so the exit animation can finish
+// before it's actually removed.
+const PANEL_EXIT_MS = 220;
+
 // Shown once, before the first message - guided quick replies reduce
 // blank-input drop-off and convert better than an empty text box alone.
 // Free text stays available the whole time; these are just a head start.
@@ -62,6 +67,10 @@ export default function ChatWidget({
   clinicName = "Support",
 }: ChatWidgetProps) {
   const [open, setOpen] = useState(false);
+  // True only during the close animation - the panel stays mounted (and
+  // `open` stays true) for its duration, then closeChat() flips `open` to
+  // actually unmount it once the exit animation has had time to finish.
+  const [closing, setClosing] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -188,13 +197,31 @@ export default function ChatWidget({
     setLoading(false);
   }
 
+  // Keeps the panel mounted (and playing the panel-exit CSS animation, see
+  // globals.css) for PANEL_EXIT_MS before actually unmounting it - without
+  // this, {open && <panel/>} would unmount instantly and there'd be nothing
+  // left on screen for a close animation to play against.
+  function closeChat() {
+    setClosing(true);
+    setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, PANEL_EXIT_MS);
+  }
+
   return (
     <div className="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-3 font-sans">
       {open && (
         // Full-screen below the sm breakpoint (closed via the header X, not
         // a separate "mobile mode") - a floating 420x760 card above it,
         // same as before, just bigger.
-        <div className="fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden border-0 bg-white text-neutral-900 shadow-none scheme-light sm:static sm:inset-auto sm:h-190 sm:max-h-[calc(100vh-2rem)] sm:w-105 sm:max-w-[calc(100vw-2rem)] sm:rounded-2xl sm:border sm:border-black/10 sm:shadow-2xl">
+        <div
+          className={`fixed inset-0 z-50 flex h-full w-full flex-col overflow-hidden border-0 bg-white text-neutral-900 shadow-none scheme-light sm:static sm:inset-auto sm:h-190 sm:max-h-[calc(100vh-2rem)] sm:w-105 sm:max-w-[calc(100vw-2rem)] sm:animate-none sm:rounded-2xl sm:border sm:border-black/10 sm:shadow-2xl ${
+            closing
+              ? "animate-[panel-exit_220ms_ease-in_forwards]"
+              : "animate-[panel-enter_220ms_ease-out]"
+          }`}
+        >
           <div className="flex items-center justify-between bg-neutral-900 px-4 py-3 text-white">
             <span className="font-medium">{clinicName} AI Assistant</span>
             {/* Fixed-size flex-centered boxes, not just padding around a
@@ -213,7 +240,7 @@ export default function ChatWidget({
                 </button>
               )}
               <button
-                onClick={() => setOpen(false)}
+                onClick={closeChat}
                 aria-label="Close chat"
                 className="flex h-8 w-8 items-center justify-center rounded text-xl leading-none text-white/80 hover:bg-white/10 hover:text-white"
               >
@@ -341,7 +368,7 @@ export default function ChatWidget({
       )}
 
       <button
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => (open ? closeChat() : setOpen(true))}
         aria-label={open ? "Close chat" : "Open chat"}
         // On mobile, the open panel is full-screen and covers this button
         // anyway (closing happens via the header X instead) - hide it
