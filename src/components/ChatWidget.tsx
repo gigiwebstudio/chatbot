@@ -230,18 +230,23 @@ export default function ChatWidget({
                     Hi! How can we help?
                   </div>
                 </div>
-                <div className="mt-3 grid grid-cols-2 gap-2">
-                  {QUICK_REPLIES.map((qr) => (
+                {/* WhatsApp-style option list: one bordered card, full-width
+                    rows separated by thin dividers, instead of a grid of
+                    separate pill buttons. */}
+                <div className="mt-3 overflow-hidden rounded-xl border border-black/10">
+                  {QUICK_REPLIES.map((qr, i) => (
                     <button
                       key={qr.label}
                       onClick={() => sendMessage(qr.message)}
                       disabled={loading}
-                      // rounded-xl, not rounded-full - a pill shape stretches
-                      // into an odd elongated capsule once a label wraps to
-                      // two lines in the 2-column grid.
-                      className="rounded-xl border border-black/10 bg-white px-3 py-2 text-left text-xs font-medium text-neutral-700 transition hover:border-black/20 hover:bg-neutral-50 disabled:opacity-40"
+                      className={`flex w-full items-center justify-between gap-2 bg-white px-3 py-2.5 text-left text-sm font-medium text-neutral-700 transition hover:bg-neutral-50 disabled:opacity-40 ${
+                        i > 0 ? "border-t border-black/10" : ""
+                      }`}
                     >
-                      {qr.label}
+                      <span>{qr.label}</span>
+                      <span aria-hidden className="text-neutral-300">
+                        ›
+                      </span>
                     </button>
                   ))}
                 </div>
