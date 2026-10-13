@@ -24,14 +24,14 @@ const PANEL_EXIT_MS = 220;
 // blank-input drop-off and convert better than an empty text box alone.
 // Free text stays available the whole time; these are just a head start.
 const QUICK_REPLIES = [
-  {
-    label: "🤕 Not sure what I need",
-    message: "I'm not sure which service I need - can you help me figure out what to book?",
-  },
   { label: "🩺 Our services", message: "What services do you offer?" },
   { label: "📅 Book appointment", message: "How do I book an appointment?" },
   { label: "🕒 Hours & location", message: "What are your hours and where are you located?" },
   { label: "💳 Insurance & billing", message: "Do you offer direct billing or accept ICBC claims?" },
+  {
+    label: "🤕 Not sure what I need",
+    message: "I'm not sure which service I need - can you help me figure out what to book?",
+  },
 ];
 
 // Tailwind styling for markdown elements rendered inside a small chat bubble -
