@@ -310,7 +310,11 @@ export default function ChatWidget({
           </div>
 
           <div className="border-t border-black/10 p-3">
-            <div className="flex items-end gap-2 rounded-2xl border border-black/10 bg-white py-2 pl-4 pr-1.5 focus-within:border-neutral-400">
+            {/* items-center, not items-end - with a single-line textarea,
+                items-end aligned the (taller, fixed-height) round send
+                button to the textarea's bottom, which pushed it above the
+                text instead of centering against it. */}
+            <div className="flex items-center gap-2 rounded-2xl border border-black/10 bg-white py-2 pl-4 pr-1.5 focus-within:border-neutral-400">
               <textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
