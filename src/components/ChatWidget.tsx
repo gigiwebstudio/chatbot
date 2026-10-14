@@ -35,22 +35,27 @@ const PANEL_EXIT_MS = 220;
 // packs) - a law firm has no "insurance & billing" concept, so reusing the
 // clinic set verbatim would show a nonsensical button.
 const QUICK_REPLIES_BY_VERTICAL: Record<string, { label: string; message: string }[]> = {
+  // A single regular space between the emoji and label collapses visually
+  // tight against some emoji glyphs' own right-side bearing - adding a
+  // non-breaking space (U+00A0) alongside it, rather than just another
+  // regular space, actually widens the gap instead of being collapsed away
+  // like a repeated regular space would be.
   clinic: [
-    { label: "🩺 Our services", message: "What services do you offer?" },
-    { label: "📅 Book appointment", message: "How do I book an appointment?" },
-    { label: "🕒 Hours & location", message: "What are your hours and where are you located?" },
-    { label: "💳 Insurance & billing", message: "Do you offer direct billing or accept ICBC claims?" },
+    { label: "🩺  Our services", message: "What services do you offer?" },
+    { label: "📅  Book appointment", message: "How do I book an appointment?" },
+    { label: "🕒  Hours & location", message: "What are your hours and where are you located?" },
+    { label: "💳  Insurance & billing", message: "Do you offer direct billing or accept ICBC claims?" },
     {
-      label: "🤕 Not sure what I need",
+      label: "🤕  Not sure what I need",
       message: "I'm not sure which service I need - can you help me figure out what to book?",
     },
   ],
   law_firm: [
-    { label: "⚖️ Practice areas", message: "What areas do you practice in?" },
-    { label: "📅 Book a consultation", message: "How do I book a consultation?" },
-    { label: "🕒 Hours & location", message: "What are your hours and where are you located?" },
+    { label: "⚖️  Practice areas", message: "What areas do you practice in?" },
+    { label: "📅  Book a consultation", message: "How do I book a consultation?" },
+    { label: "🕒  Hours & location", message: "What are your hours and where are you located?" },
     {
-      label: "🤔 Not sure what I need",
+      label: "🤔  Not sure what I need",
       message: "I'm not sure which practice area I need - can you help me figure out what to book?",
     },
   ],
@@ -81,7 +86,10 @@ const markdownComponents = {
     <h3 className="mb-1 mt-2 font-semibold first:mt-0" {...props} />
   ),
   a: (props: React.ComponentPropsWithoutRef<"a">) => (
-    <a className="underline" target="_blank" rel="noopener noreferrer" {...props} />
+    // break-words as a safety net - the system prompt tells Claude to never
+    // use a raw URL as link text, but if one ever slips through, this wraps
+    // it instead of letting one long unbroken token overflow the bubble.
+    <a className="underline wrap-break-word" target="_blank" rel="noopener noreferrer" {...props} />
   ),
 };
 

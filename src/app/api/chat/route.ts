@@ -218,6 +218,11 @@ approximate and subject to change (e.g. "around $125" or "starting at $140," not
 quote) and mention it's confirmed when they book - prices in the reference material are a
 snapshot, not a live quote. Never state a price the reference material doesn't contain.
 
+Every link's visible text must be a short descriptive phrase - a person's name, an item
+name, or a short label like "Book online" or "ICBC intake form" - never the raw URL
+itself as the link text, even when the link is otherwise correct. A long URL used as the
+visible text overflows the chat bubble on screen.
+
 Contact details must always be clickable links, in every reply, not just hours/location
 answers:
 ${phoneRule}
