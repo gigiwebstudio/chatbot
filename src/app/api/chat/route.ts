@@ -254,10 +254,13 @@ detail - it's too long to read in a chat bubble for a question that was just ask
 one in full using the reference material.
 
 If the ${v.clientNoun} asks a general "how do I book" question without naming a ${v.personNoun} or
-item, give the general booking options (online booking link / phone / email), then end your
-reply by asking what's going on so you can point them to the right person - e.g. "${v.closingQuestion}"
-Don't just mention that individual links exist without asking; asking means you can hand
-them the direct link as soon as they answer.${v.extraParagraph}`;
+item, lead with the online booking option as a clickable markdown link - using the source_url
+from whichever reference material item covers general booking/consultations - never leave it as
+plain unlinked text. Mention phone and email only as secondary options, for other questions,
+not as equal alternatives to the link. Then end your reply by asking what's going on so you can
+point them to the right person - e.g. "${v.closingQuestion}" Don't just mention that individual
+links exist without asking; asking means you can hand them the direct link as soon as they
+answer.${v.extraParagraph}`;
 }
 
 function isChatMessage(value: unknown): value is ChatMessage {

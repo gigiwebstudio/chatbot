@@ -3,6 +3,8 @@
 //   <script src="https://<this-app's-domain>/embed.js" data-clinic-id="<uuid>"></script>
 //
 // Optional attributes: data-clinic-name (shown in the widget header),
+// data-vertical (which quick-reply set to show - 'clinic' or 'law_firm',
+// see QUICK_REPLIES_BY_VERTICAL in ChatWidget.tsx; defaults to 'clinic'),
 // data-base-url (override if this script is ever served from a different
 // domain than the app itself - normally derived from the script's own src).
 //
@@ -30,6 +32,7 @@
   }
 
   var clinicName = thisScript.getAttribute("data-clinic-name") || "";
+  var vertical = thisScript.getAttribute("data-vertical") || "";
   var baseUrl = thisScript.getAttribute("data-base-url");
   if (!baseUrl) {
     baseUrl = thisScript.src.replace(/\/embed\.js(?:[?#].*)?$/, "");
@@ -37,6 +40,7 @@
 
   var params = new URLSearchParams({ clinicId: clinicId });
   if (clinicName) params.set("clinicName", clinicName);
+  if (vertical) params.set("vertical", vertical);
 
   var iframe = document.createElement("iframe");
   iframe.src = baseUrl + "/widget?" + params.toString();

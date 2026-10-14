@@ -6,6 +6,7 @@
     "phone": "604-444-4566",
     "email": "info@northroadlaw.com",
     "address": "4501 North Road, Suite 208, Burnaby, BC V3N 4R7",
+    "maps_url": "https://maps.app.goo.gl/FjG5aq9o5rUUsvvh9",
     "vertical": "law_firm"
   },
   "documents": [
@@ -34,7 +35,7 @@
       "metadata": { "category": "service", "service": "notarial-services", "source_url": "https://www.northroadlaw.com/en/practice-areas/" }
     },
     {
-      "content": "North Road Law offers consultations that can be booked online through the firm's appointment scheduler, or by calling 604-444-4566 or emailing info@northroadlaw.com.",
+      "content": "North Road Law offers consultations that can be booked online through the firm's appointment scheduler (https://calendar.app.google/F5gGSvN4iBunqu4h8), or by calling 604-444-4566 or emailing info@northroadlaw.com. The online scheduler is the fastest way to book - use phone or email for other questions.",
       "metadata": { "category": "service", "service": "consultation", "source_url": "https://calendar.app.google/F5gGSvN4iBunqu4h8" }
     },
     {

@@ -7,6 +7,14 @@ import remarkBreaks from "remark-breaks";
 interface ChatWidgetProps {
   clinicId: string;
   clinicName?: string;
+  // Which quick-reply set to show (see QUICK_REPLIES_BY_VERTICAL below) -
+  // purely a UI choice, duplicated here the same way clinicName already is
+  // (via the embed snippet / URL params) rather than fetched, so the quick
+  // replies render instantly with no extra round-trip before first paint.
+  // Not safety-relevant: the actual escalation gate and system prompt are
+  // selected server-side from the clinic's real `vertical` column (see
+  // src/lib/safety/), independent of whatever this prop claims.
+  vertical?: string;
 }
 
 interface Message {
@@ -23,16 +31,30 @@ const PANEL_EXIT_MS = 220;
 // Shown once, before the first message - guided quick replies reduce
 // blank-input drop-off and convert better than an empty text box alone.
 // Free text stays available the whole time; these are just a head start.
-const QUICK_REPLIES = [
-  { label: "🩺 Our services", message: "What services do you offer?" },
-  { label: "📅 Book appointment", message: "How do I book an appointment?" },
-  { label: "🕒 Hours & location", message: "What are your hours and where are you located?" },
-  { label: "💳 Insurance & billing", message: "Do you offer direct billing or accept ICBC claims?" },
-  {
-    label: "🤕 Not sure what I need",
-    message: "I'm not sure which service I need - can you help me figure out what to book?",
-  },
-];
+// One set per vertical (see src/lib/safety/ for the matching prompt/safety
+// packs) - a law firm has no "insurance & billing" concept, so reusing the
+// clinic set verbatim would show a nonsensical button.
+const QUICK_REPLIES_BY_VERTICAL: Record<string, { label: string; message: string }[]> = {
+  clinic: [
+    { label: "🩺 Our services", message: "What services do you offer?" },
+    { label: "📅 Book appointment", message: "How do I book an appointment?" },
+    { label: "🕒 Hours & location", message: "What are your hours and where are you located?" },
+    { label: "💳 Insurance & billing", message: "Do you offer direct billing or accept ICBC claims?" },
+    {
+      label: "🤕 Not sure what I need",
+      message: "I'm not sure which service I need - can you help me figure out what to book?",
+    },
+  ],
+  law_firm: [
+    { label: "⚖️ Practice areas", message: "What areas do you practice in?" },
+    { label: "📅 Book a consultation", message: "How do I book a consultation?" },
+    { label: "🕒 Hours & location", message: "What are your hours and where are you located?" },
+    {
+      label: "🤔 Not sure what I need",
+      message: "I'm not sure which practice area I need - can you help me figure out what to book?",
+    },
+  ],
+};
 
 // Tailwind styling for markdown elements rendered inside a small chat bubble -
 // tight spacing, no default browser margins/font sizes.
@@ -66,7 +88,9 @@ const markdownComponents = {
 export default function ChatWidget({
   clinicId,
   clinicName = "Support",
+  vertical = "clinic",
 }: ChatWidgetProps) {
+  const quickReplies = QUICK_REPLIES_BY_VERTICAL[vertical] ?? QUICK_REPLIES_BY_VERTICAL.clinic;
   const [open, setOpen] = useState(false);
   // True only during the close animation - the panel stays mounted (and
   // `open` stays true) for its duration, then closeChat() flips `open` to
@@ -322,7 +346,7 @@ export default function ChatWidget({
                     against the bubble reads as "button" on its own,
                     without needing a shared background with the greeting. */}
                 <div className="mt-1 flex flex-col gap-1.5">
-                  {QUICK_REPLIES.map((qr) => (
+                  {quickReplies.map((qr) => (
                     <button
                       key={qr.label}
                       onClick={() => {

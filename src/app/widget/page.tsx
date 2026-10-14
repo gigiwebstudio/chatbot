@@ -21,6 +21,7 @@ function WidgetPageInner() {
   const searchParams = useSearchParams();
   const clinicId = searchParams.get("clinicId");
   const clinicName = searchParams.get("clinicName") ?? undefined;
+  const vertical = searchParams.get("vertical") ?? undefined;
 
   if (!clinicId) {
     return (
@@ -30,7 +31,7 @@ function WidgetPageInner() {
     );
   }
 
-  return <ChatWidget clinicId={clinicId} clinicName={clinicName} />;
+  return <ChatWidget clinicId={clinicId} clinicName={clinicName} vertical={vertical} />;
 }
 
 export default function WidgetPage() {

@@ -18,11 +18,12 @@ function HomeInner() {
   const searchParams = useSearchParams();
   const clinicId = searchParams.get("clinicId") ?? DEFAULT_CLINIC_ID;
   const clinicName = searchParams.get("clinicName") ?? DEFAULT_CLINIC_NAME;
+  const vertical = searchParams.get("vertical") ?? undefined;
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 px-6 font-sans">
       <h1 className="text-center text-2xl font-semibold text-zinc-900">
-        Clinic AI Assistant Widget Demo
+        AI Assistant Widget Demo
       </h1>
       <p className="mt-2 max-w-md text-center text-sm text-zinc-500">
         오른쪽 아래 채팅 버튼을 눌러 테스트해보세요. 이 페이지는 위젯 동작
@@ -30,7 +31,7 @@ function HomeInner() {
       </p>
 
       {clinicId ? (
-        <ChatWidget clinicId={clinicId} clinicName={clinicName} />
+        <ChatWidget clinicId={clinicId} clinicName={clinicName} vertical={vertical} />
       ) : (
         <p className="mt-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-center text-sm text-amber-800">
           NEXT_PUBLIC_DEMO_CLINIC_ID가 .env.local에 설정되어 있지 않습니다.
