@@ -28,6 +28,22 @@ interface ChatRequestBody {
 const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+// Tags booking/service links with a source marker so that IF the clinic ever
+// connects GA4 (or similar) to their JaneApp/website analytics, those tools
+// can attribute a booking back to "came from the AI assistant" - we can't
+// see JaneApp's own booking completions ourselves (no API access for that),
+// so this is a complementary signal for the clinic's own analytics, not
+// something we read back. Must be inserted before the "#" - JaneApp booking
+// pages are a hash-routed SPA (".../#/staff_member/60"), so anything after
+// the "#" is a client-side route, not a real query string.
+function withSourceParam(url: string): string {
+  const hashIndex = url.indexOf("#");
+  const base = hashIndex === -1 ? url : url.slice(0, hashIndex);
+  const hash = hashIndex === -1 ? "" : url.slice(hashIndex);
+  const sep = base.includes("?") ? "&" : "?";
+  return `${base}${sep}utm_source=ai_assistant&utm_medium=chatbot${hash}`;
+}
+
 function buildSystemPrompt(clinic: ClinicContact | null): string {
   const clinicName = clinic?.name ?? "the clinic";
   const phoneDigits = clinic?.phone?.replace(/\D/g, "");
@@ -272,8 +288,9 @@ function fixPractitionerLinks(reply: string, roster: PractitionerLink[]): string
         linkLower.includes(k.lastName) &&
         k.firstNames.some((fn) => linkLower.includes(fn))
     );
-    if (candidates.length === 1 && candidates[0].url !== url) {
-      return `[${linkText}](${candidates[0].url})`;
+    if (candidates.length === 1) {
+      const tagged = withSourceParam(candidates[0].url);
+      if (tagged !== url) return `[${linkText}](${tagged})`;
     }
     return full;
   });
@@ -316,8 +333,9 @@ function fixServiceLinks(reply: string, services: ServiceLink[]): string {
         k.words.every((w) => linkLower.includes(w)) ||
         k.aliases.some((a) => linkLower.includes(a))
     );
-    if (candidates.length === 1 && candidates[0].url !== url) {
-      return `[${linkText}](${candidates[0].url})`;
+    if (candidates.length === 1) {
+      const tagged = withSourceParam(candidates[0].url);
+      if (tagged !== url) return `[${linkText}](${tagged})`;
     }
     return full;
   });

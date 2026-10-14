@@ -116,6 +116,26 @@ export async function getClinicLinkables(
   };
 }
 
+export type EventType = "widget_opened" | "quick_reply_click" | "outbound_link_click";
+
+// Best-effort usage tracking (see events table in schema.sql) - never throws,
+// since a tracking failure should never break the actual chat experience.
+export async function insertEvent(
+  clinicId: string,
+  sessionId: string,
+  eventType: EventType,
+  eventData: Record<string, unknown> = {}
+): Promise<void> {
+  try {
+    const supabase = getSupabaseClient();
+    await supabase
+      .from("events")
+      .insert({ clinic_id: clinicId, session_id: sessionId, event_type: eventType, event_data: eventData });
+  } catch (err) {
+    console.error("Failed to insert event:", err);
+  }
+}
+
 export interface ClinicContact {
   name: string;
   phone: string | null;

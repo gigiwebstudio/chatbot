@@ -59,6 +59,25 @@ create index if not exists documents_clinic_id_idx
 create index if not exists documents_embedding_idx
   on documents using hnsw (embedding vector_cosine_ops);
 
+-- Click/engagement tracking for the widget - which quick replies and
+-- outbound links (booking/service/billing) get clicked, and how often the
+-- widget gets opened at all, so a clinic's usage can be reported on later.
+-- No PII per CLAUDE.md's PIPA-BC note: session_id is a random id the widget
+-- generates itself in the browser (sessionStorage), not tied to any real
+-- identity, and event_data only ever holds non-personal details like a
+-- button label or link URL - never message content or contact info.
+create table if not exists events (
+  id bigserial primary key,
+  clinic_id uuid not null references clinics(id) on delete cascade,
+  session_id uuid not null,
+  event_type text not null, -- 'widget_opened' | 'quick_reply_click' | 'outbound_link_click'
+  event_data jsonb not null default '{}'::jsonb,
+  created_at timestamptz not null default now()
+);
+
+create index if not exists events_clinic_id_idx on events (clinic_id);
+create index if not exists events_session_id_idx on events (session_id);
+
 -- RPC used by src/lib/supabase.ts -> matchDocuments()
 -- Always scoped to one clinic - never search across clinics.
 create or replace function match_documents (
