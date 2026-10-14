@@ -1,0 +1,53 @@
+{
+  "clinic": {
+    "slug": "north-road-law",
+    "name": "North Road Law",
+    "booking_url": "https://calendar.app.google/F5gGSvN4iBunqu4h8",
+    "phone": "604-444-4566",
+    "email": "info@northroadlaw.com",
+    "address": "4501 North Road, Suite 208, Burnaby, BC V3N 4R7",
+    "vertical": "law_firm"
+  },
+  "documents": [
+    {
+      "content": "North Road Law is a law firm located at 4501 North Road, Suite 208, Burnaby, BC V3N 4R7, in Burnaby's Korean Town Centre with complimentary parking available. The firm practices real estate law, business and corporate law, wills, and notarial services. Phone: 604-444-4566. Email: info@northroadlaw.com.",
+      "metadata": { "category": "general", "source_url": "https://www.northroadlaw.com/en/" }
+    },
+    {
+      "content": "North Road Law's office hours are Monday to Friday, 9am to 5pm. The office is located at 4501 North Road, Suite 208, Burnaby, BC V3N 4R7, in the Korean Town Centre on North Road with complimentary parking available.",
+      "metadata": { "category": "hours_location", "source_url": "https://www.northroadlaw.com/en/contact-us/" }
+    },
+    {
+      "content": "North Road Law's real estate practice assists with residential and commercial property purchases and sales, refinancing and lending, and family property transfers. The firm guides clients through each step of what can otherwise be a stressful transaction.",
+      "metadata": { "category": "service", "service": "real-estate", "source_url": "https://www.northroadlaw.com/en/practice-areas/" }
+    },
+    {
+      "content": "North Road Law's business and corporate practice helps entrepreneurs with commercial deals, including business asset purchases and sales, share purchases and sales, company incorporation, business name registration, commercial leases, corporate reorganization and structuring, and business financing. The firm supports clients through contract drafting, due diligence, and transaction support.",
+      "metadata": { "category": "service", "service": "business-corporate", "source_url": "https://www.northroadlaw.com/en/practice-areas/" }
+    },
+    {
+      "content": "North Road Law prepares simple wills for clients, along with guardian nominations for minor children, financial powers of attorney, and representation agreements for financial and health management decisions.",
+      "metadata": { "category": "service", "service": "wills", "source_url": "https://www.northroadlaw.com/en/practice-areas/" }
+    },
+    {
+      "content": "North Road Law offers walk-in notarial services, including signature notarization and attestations, statutory declarations, affidavits, certified true copies of documents, and travel consent letters and identity proof documentation.",
+      "metadata": { "category": "service", "service": "notarial-services", "source_url": "https://www.northroadlaw.com/en/practice-areas/" }
+    },
+    {
+      "content": "North Road Law offers consultations that can be booked online through the firm's appointment scheduler, or by calling 604-444-4566 or emailing info@northroadlaw.com.",
+      "metadata": { "category": "service", "service": "consultation", "source_url": "https://calendar.app.google/F5gGSvN4iBunqu4h8" }
+    },
+    {
+      "content": "Jenny H. Cho (조현빈) is the Managing Partner at North Road Law, practicing real estate, business, and corporate law. She is licensed in British Columbia and in New York (non-practicing), and is fluent in Korean and English. She previously practiced as a New York-licensed lawyer in Seoul, Korea. She holds an LLB/BA from the University of Auckland and an LLM from American University and Yonsei University.",
+      "metadata": { "category": "team", "name": "Jenny H. Cho", "title": "Managing Partner", "booking_url": "https://calendar.app.google/F5gGSvN4iBunqu4h8", "source_url": "https://www.northroadlaw.com/en/lawyers/" }
+    },
+    {
+      "content": "Eleanor Chung (정희윤) is the Founding and Managing Lawyer at North Road Law, practicing real estate, business, and corporate law. She is licensed in British Columbia and previously worked as a corporate and securities lawyer at a national Vancouver law firm. She holds a Juris Doctor from Queen's University and a BA from the University of British Columbia.",
+      "metadata": { "category": "team", "name": "Eleanor Chung", "title": "Founding and Managing Lawyer", "booking_url": "https://calendar.app.google/F5gGSvN4iBunqu4h8", "source_url": "https://www.northroadlaw.com/en/lawyers/" }
+    },
+    {
+      "content": "Mia Shinyoung Shin (신신영) is an Articled Student at North Road Law, with experience in civil and criminal litigation as well as corporate advisory from practicing law in South Korea. She is fluent in Korean and English, and is completing her Canadian articles qualification. She holds a Master of Laws from UBC and a Juris Doctor from the University of Seoul.",
+      "metadata": { "category": "team", "name": "Mia Shinyoung Shin", "title": "Articled Student", "booking_url": "https://calendar.app.google/F5gGSvN4iBunqu4h8", "source_url": "https://www.northroadlaw.com/en/lawyers/" }
+    }
+  ]
+}

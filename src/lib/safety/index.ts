@@ -1,4 +1,5 @@
 import { clinicSafetyPack } from "./clinic";
+import { lawFirmSafetyPack } from "./law_firm";
 import type { SafetyPack } from "./types";
 
 export { detectLanguage } from "./types";
@@ -6,6 +7,7 @@ export type { SafetyPack, SupportedLanguage } from "./types";
 
 const PACKS: Record<string, SafetyPack> = {
   clinic: clinicSafetyPack,
+  law_firm: lawFirmSafetyPack,
 };
 
 // Falls back to the clinic/medical pack for an unknown or missing vertical -
